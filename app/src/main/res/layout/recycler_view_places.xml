@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@color/cardview_light_background"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/placeImage"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/sinai"
+            android:scaleType="fitXY" />
+
+        <customfonts.TextView_Lato
+            android:id="@+id/placeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="pyramids"
+            android:textColor="@color/text"
+            android:textSize="19sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+
+            >
+
+            <customfonts.Textview_lato_thin
+                android:id="@+id/placeGovernate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giza"
+                android:layout_weight="0.5"
+                android:gravity="center" />
+
+            <customfonts.Textview_lato_thin
+                android:id="@+id/placeCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pharoh"
+                android:layout_weight="0.5"
+                android:gravity="center" />
+        </LinearLayout>
+
+
+        <customfonts.TextView_Lato
+            android:id="@+id/placeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginRight="33dp"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="15dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="A daily to  in the literal sense of one published ea publications issued at stated intervals, such as academic journals. "
+            android:textColor="@color/subtext"
+            android:textSize="14.5sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
