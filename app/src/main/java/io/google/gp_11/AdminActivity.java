@@ -17,14 +17,17 @@ import AdminFragments.AdminHomeFragment;
 import AdminFragments.AdminPackagesFragment;
 import AdminFragments.AdminPlacesFragment;
 import AdminFragments.AdminUsersFragment;
+import BL.Session;
 
 public class AdminActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        session = new Session(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -100,7 +103,10 @@ public class AdminActivity extends AppCompatActivity {
                                 intent.putExtra("Mode", 2);
                                 startActivity(intent);
                                 break;
-
+                            case R.id.nav_logout:
+                                session.setLoggedIn(false);
+                                finish();
+                                startActivity(new Intent(AdminActivity.this, MainActivity.class));
                             default:
                                 fragmentClass = AdminHomeFragment.class;
                         }
