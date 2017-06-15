@@ -3,10 +3,8 @@ package customfonts;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-
-public class TextView_Lato extends TextView {
+public class TextView_Lato extends android.support.v7.widget.AppCompatTextView {
 
     public TextView_Lato(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
