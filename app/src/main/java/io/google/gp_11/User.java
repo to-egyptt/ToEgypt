@@ -12,26 +12,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import AdminFragments.AdminGuidesFragmemnt;
 import AdminFragments.AdminHomeFragment;
 import AdminFragments.AdminPackagesFragment;
 import AdminFragments.AdminPlacesFragment;
-import AdminFragments.AdminUsersFragment;
-import BL.Session;
 
-public class AdminActivity extends AppCompatActivity {
+public class User extends AppCompatActivity {
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
-    private Session session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        session = new Session(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.activity_user);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
-        mToolbar.setTitle("Home");
+        mToolbar.setTitle("Places");
         setSupportActionBar(mToolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -42,8 +39,8 @@ public class AdminActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
-            navigationView.getMenu().performIdentifierAction(R.id.nav_home, 0);
-            mToolbar.setTitle("Home");
+            navigationView.getMenu().performIdentifierAction(R.id.nav_places, 0);
+            mToolbar.setTitle("Places");
             navigationView.getMenu().getItem(0).setChecked(true);
         } else {
 
@@ -77,18 +74,6 @@ public class AdminActivity extends AppCompatActivity {
                         Fragment fragment = null;
                         Class fragmentClass = AdminHomeFragment.class;
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_home:
-                                fragmentClass = AdminHomeFragment.class;
-                                mToolbar.setTitle("Home");
-                                break;
-                            case R.id.nav_users:
-                                fragmentClass = AdminUsersFragment.class;
-                                mToolbar.setTitle("Users");
-                                break;
-                            case R.id.nav_guides:
-                                fragmentClass = AdminGuidesFragmemnt.class;
-                                mToolbar.setTitle("Guides");
-                                break;
                             case R.id.nav_packages:
                                 fragmentClass = AdminPackagesFragment.class;
                                 mToolbar.setTitle("Packages");
@@ -97,16 +82,21 @@ public class AdminActivity extends AppCompatActivity {
                                 fragmentClass = AdminPlacesFragment.class;
                                 mToolbar.setTitle("Places");
                                 break;
+                            case R.id.nav_myPackages:
+                                fragmentClass = AdminPackagesFragment.class;
+                                mToolbar.setTitle("My Packages");
+                                break;
 
                             case R.id.nav_profile:
-                                Intent intent = new Intent(AdminActivity.this, AdminUpdateUser.class);
+                                Intent intent = new Intent(User.this, AdminUpdateUser.class);
                                 intent.putExtra("Mode", 2);
                                 startActivity(intent);
                                 break;
-                            case R.id.nav_logout:
-                                session.setLoggedIn(false);
-                                finish();
-                                startActivity(new Intent(AdminActivity.this, MainActivity.class));
+
+
+//                                fragmentClass = AdminProfileFragment.class;
+//                                mToolbar.setTitle("My Packages");
+//                                break;
                             default:
                                 fragmentClass = AdminHomeFragment.class;
                         }
@@ -120,7 +110,7 @@ public class AdminActivity extends AppCompatActivity {
 
                         // Insert the fragment by replacing any existing fragment
                         FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                        fragmentManager.beginTransaction().replace(R.id.userContent, fragment).commit();
 
                         // Highlight the selected item has been done by NavigationView
 //                        menuItem.setChecked(true);
@@ -130,4 +120,5 @@ public class AdminActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

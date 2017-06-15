@@ -5,8 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin">
-
+    tools:context="io.google.gp_11.User">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
         <FrameLayout
-            android:id="@+id/adminContent"
+            android:id="@+id/userContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
 
@@ -32,7 +32,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/navigation_menu_admin">
+        app:menu="@menu/navigation_menu_user">
 
     </android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>
+
+
+
+

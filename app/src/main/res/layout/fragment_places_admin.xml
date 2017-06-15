@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".AdminActivity">
+    tools:context=".Admin">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
@@ -13,12 +13,13 @@
 
 
         <customfonts.TextView_Lato
+            android:id="@+id/placeHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
-            android:text="@string/updatePlace"
+            android:text=""
             android:textStyle="bold"
             android:textColor="#000" />
 

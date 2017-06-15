@@ -18,11 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminActivity" />
+        <activity android:name=".Admin" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AdminUpdateUser" />
         <activity android:name=".AdminUpdatePlace" />
-        <activity android:name=".AdminUpdatePackage"></activity>
+        <activity android:name=".AdminUpdatePackage" />
+        <activity android:name=".User" />
     </application>
 
 </manifest>

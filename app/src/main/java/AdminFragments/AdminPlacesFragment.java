@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,6 +42,15 @@ public class AdminPlacesFragment extends Fragment {
     private RecyclerView recyclerView;
     private fragment_place_adapter placeAdapter;
 
+    private String activityName;
+
+    /*
+                modes
+                1 update place      admin
+                2 create place      admin
+                */
+
+
     public AdminPlacesFragment() {
         // Required empty public constructor
     }
@@ -62,6 +72,18 @@ public class AdminPlacesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_places_admin, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        TextView hint = (TextView) view.findViewById(R.id.placeHint);
+        activityName = getActivity().getClass().getSimpleName();
+        if (activityName.equals("Admin")) {
+            hint.setText("select place to edit");
+
+        } else {
+            if (activityName.equals("User")) {
+                hint.setText("select place to show all packages that belongs to this place");
+                fab.setVisibility(View.GONE);
+            }
+        }
+
         fab.setImageResource(R.drawable.addplace);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,9 +149,24 @@ public class AdminPlacesFragment extends Fragment {
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AdminUpdatePlace.class);
-                    intent.putExtra("Mode", 1);
-                    startActivity(intent);
+                    if (activityName.equals("Admin")) {
+
+                        Intent intent = new Intent(getActivity(), AdminUpdatePlace.class);
+                        intent.putExtra("Mode", 1);
+                        startActivity(intent);
+                    } else {
+                        if (activityName.equals("User")) {
+                            Fragment fragment = new AdminPackagesFragment();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("placeid", 1);
+                            fragment.setArguments(bundle);
+
+                            FragmentManager fragmentManager = getFragmentManager();
+
+                            fragmentManager.beginTransaction().replace(R.id.userContent, fragment).commit();
+                        }
+                    }
                 }
             });
 

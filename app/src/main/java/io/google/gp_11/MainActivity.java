@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         session = new Session(this);
         if (session.loggedIn()) {
-            Intent i_to_admin = new Intent(MainActivity.this, AdminActivity.class);
+            Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
             startActivity(i_to_admin);
             finish();
         }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                                 user1 = users.get(0);
                                 if (user1.getTypeId() == 1) {
                                     session.setEditor(user1.getId(), user1.getTypeId(), true);
-                                    Intent i_to_admin = new Intent(MainActivity.this, AdminActivity.class);
+                                    Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
                                     startActivity(i_to_admin);
                                     finish();
 
