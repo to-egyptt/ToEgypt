@@ -43,9 +43,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         session = new Session(this);
         if (session.loggedIn()) {
-            Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
-            startActivity(i_to_admin);
-            finish();
+            if (session.getUserType() == 1) {
+                Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
+                startActivity(i_to_admin);
+                finish();
+            } else if (session.getUserType() == 2) {
+                Intent i_to_user = new Intent(MainActivity.this, User.class);
+                startActivity(i_to_user);
+                finish();
+            }
         }
         setContentView(R.layout.activity_main);
         progressDialog = new ProgressDialog(this);

@@ -36,7 +36,6 @@ public class AdminPackagesFragment extends Fragment {
     private ArrayList<model_package> packageModels;
     private RecyclerView recyclerView;
     private fragment_package_adapter PackageAdapter;
-
     private String activityName;
 
     public AdminPackagesFragment() {
