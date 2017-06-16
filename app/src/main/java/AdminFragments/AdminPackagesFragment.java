@@ -164,6 +164,7 @@ public class AdminPackagesFragment extends Fragment {
 
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();

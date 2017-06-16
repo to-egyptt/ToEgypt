@@ -126,4 +126,17 @@ public class User extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+
+            fm.popBackStack();
+
+        } else {
+
+            super.onBackPressed();
+
+        }
+    }
 }
