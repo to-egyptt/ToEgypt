@@ -15,16 +15,18 @@ import android.view.MenuItem;
 import AdminFragments.AdminHomeFragment;
 import AdminFragments.AdminPackagesFragment;
 import AdminFragments.AdminPlacesFragment;
+import BL.Session;
 
 public class User extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
-
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        session = new Session(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -92,7 +94,10 @@ public class User extends AppCompatActivity {
                                 intent.putExtra("Mode", 2);
                                 startActivity(intent);
                                 break;
-
+                            case R.id.nav_logout:
+                                session.setLoggedIn(false);
+                                finish();
+                                startActivity(new Intent(User.this, MainActivity.class));
 
 //                                fragmentClass = AdminProfileFragment.class;
 //                                mToolbar.setTitle("My Packages");

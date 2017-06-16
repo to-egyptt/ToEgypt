@@ -138,6 +138,12 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(i_to_admin);
                                     finish();
 
+                                } else if (user1.getTypeId() == 2) {
+                                    session.setEditor(user1.getId(), user1.getTypeId(), true);
+                                    Intent i_to_user = new Intent(MainActivity.this, User.class);
+                                    startActivity(i_to_user);
+                                    finish();
+
                                 } else {
                                     Toast.makeText(MainActivity.this, "some thing error", Toast.LENGTH_SHORT).show();
                                     sign_in.setText("sign in");

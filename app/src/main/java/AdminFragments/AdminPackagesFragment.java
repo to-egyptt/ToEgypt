@@ -37,6 +37,8 @@ public class AdminPackagesFragment extends Fragment {
     private RecyclerView recyclerView;
     private fragment_package_adapter PackageAdapter;
 
+    private String activityName;
+
     public AdminPackagesFragment() {
         // Required empty public constructor
     }
@@ -49,6 +51,10 @@ public class AdminPackagesFragment extends Fragment {
             model_package PackageModelForRecyclerView = new model_package(pckgname[i], placesinpackage[i], Start[i], End[i], TIME[i], PRICE[i]);
             packageModels.add(PackageModelForRecyclerView);
         }
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            int myInt = bundle.getInt("placeid", defaultValue);
+//        }
         super.onCreate(savedInstanceState);
 
     }
@@ -59,6 +65,17 @@ public class AdminPackagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_packages_admin, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        TextView hint = (TextView) view.findViewById(R.id.packageHint);
+        activityName = getActivity().getClass().getSimpleName();
+        if (activityName.equals("Admin")) {
+            hint.setText("select package to edit");
+
+        } else {
+            if (activityName.equals("User")) {
+                hint.setText("select package to see details and join");
+                fab.setVisibility(View.GONE);
+            }
+        }
         fab.setImageResource(R.drawable.addpackage);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
