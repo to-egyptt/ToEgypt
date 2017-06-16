@@ -1,5 +1,6 @@
 package AdminFragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import AdminModels.model_user;
 import io.google.gp_11.AdminUpdateUser;
 import io.google.gp_11.R;
 import models.ResultUserSet;
+import models.Singleton;
 import models.ToEgyptAPI;
 import models.country;
 import models.user;
@@ -25,20 +27,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AdminUsersFragment extends Fragment {
 
-    private Integer[] IMAGE = {R.drawable.person1, R.drawable.person4, R.drawable.person5};
-    private String[] Name = {"Ahmed Abuelhassan", "Saad Khalifa", "Medo Atef"};
-    //private String[] country = {"USA", "SPAIN", "ITALY"};
     private ArrayList<user> users;
     private String country;
     private ArrayList<model_user> userModels;
     private RecyclerView recyclerView;
     private fragment_user_adapter UserAdapter;
-    Retrofit retrofit;
-
+    private Retrofit retrofit;
+    private ProgressDialog progressDialog;
     public AdminUsersFragment() {
         // Required empty public constructor
     }
@@ -46,20 +44,15 @@ public class AdminUsersFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //     userModels = new ArrayList<>();
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Retrieving data. please wait...");
+        progressDialog.setCancelable(false);
         users = new ArrayList<>();
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://2egyptwebservice.somee.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-//        for (int i = 0; i < Name.length; i++) {
-//            model_user UserModelForRecyclerView = new model_user(IMAGE[i], Name[i], country[i]);
-//            userModels.add(UserModelForRecyclerView);
-//        }
-
+        retrofit = Singleton.getRetrofit();
         super.onCreate(savedInstanceState);
+        progressDialog.show();
         getUsers();
+
     }
 
     @Override
@@ -69,7 +62,7 @@ public class AdminUsersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_users_admin, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewUsers);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
+        //updateUI();
         return view;
 
     }
@@ -89,6 +82,7 @@ public class AdminUsersFragment extends Fragment {
                 public void onResponse(Call<ResultUserSet> call, Response<ResultUserSet> response) {
                     users = (ArrayList<user>) response.body().getUsers();
                     updateUI();
+                    progressDialog.dismiss();
                 }
 
                 @Override
@@ -113,7 +107,7 @@ public class AdminUsersFragment extends Fragment {
                 @Override
                 public void onResponse(Call<country> call, Response<country> response) {
                     country1[0] = response.body().getName();
-                    updateUI();
+                    //updateUI();
                 }
 
                 @Override

@@ -20,15 +20,11 @@ public interface ToEgyptAPI {
 
     @DELETE("/odata/users({id})")
     Call<Void> deleteUser(@Path("id") int userId);
-//?$filter=username%20eq%20%27medo%20dola%27%20and%20password%20eq%20%27321%27
-//    @GET("/odata/users")
-//    Call<ResultUserSet> login();
-@GET
-Call<ResultUserSet> login(@Url String url);
 
-    //@Path(value = "username",encoded = true) String username,@Path(value = "password",encoded = true) String password
-///odata/users?$filter=username%20eq%20%27kako%20dola%27%20and%20password%20eq%20%27321%27
-    //void deleteUser(@Path("id") int userId, Callback<Response> callback);
+    @GET
+    Call<ResultUserSet> login(@Url String url);
 
+    @GET("/odata/users?$filter=type_id%20eq%203")
+    Call<ResultUserSet> getGuide();
 }
 

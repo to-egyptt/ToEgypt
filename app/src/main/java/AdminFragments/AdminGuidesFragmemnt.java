@@ -1,5 +1,6 @@
 package AdminFragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,17 +16,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import AdminModels.model_guide;
 import io.google.gp_11.AdminUpdateUser;
 import io.google.gp_11.R;
+import models.ResultUserSet;
+import models.Singleton;
+import models.ToEgyptAPI;
+import models.user;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class AdminGuidesFragmemnt extends Fragment {
-
-    private Integer[] IMAGE = {R.drawable.person1, R.drawable.person4, R.drawable.person5};
-    private String[] Name = {"salah", "Saad Khalifa", "Mohamed Atef"};
-    private String[] email = {"ab.com", "sa.com", "tefa.com"};
-
-    private ArrayList<model_guide> guideModels;
+    private Retrofit retrofit;
+    private static ArrayList<user> users;
+    private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private fragment_guide_adapter GuideAdapter;
 
@@ -37,11 +42,30 @@ public class AdminGuidesFragmemnt extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        guideModels = new ArrayList<>();
-        for (int i = 0; i < Name.length; i++) {
-            model_guide GuideModelForRecyclerView = new model_guide(IMAGE[i], Name[i], email[i]);
-            guideModels.add(GuideModelForRecyclerView);
-        }
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Retrieving data. please wait...");
+        progressDialog.setCancelable(false);
+        retrofit = Singleton.getRetrofit();
+        users = new ArrayList<>();
+        progressDialog.show();
+        ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
+        toEgyptAPI.getGuide().enqueue(new Callback<ResultUserSet>() {
+            @Override
+            public void onResponse(Call<ResultUserSet> call, Response<ResultUserSet> response) {
+                if (response.isSuccess()) {
+                    users = (ArrayList<user>) response.body().getUsers();
+                    updateUI();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultUserSet> call, Throwable t) {
+
+            }
+        });
+
+
         super.onCreate(savedInstanceState);
     }
 
@@ -63,13 +87,13 @@ public class AdminGuidesFragmemnt extends Fragment {
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewGuides);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
+        //updateUI();
         return view;
 
     }
 
     private void updateUI() {
-        GuideAdapter = new fragment_guide_adapter(guideModels);
+        GuideAdapter = new fragment_guide_adapter(users);
         recyclerView.setAdapter(GuideAdapter);
     }
 
@@ -84,16 +108,16 @@ public class AdminGuidesFragmemnt extends Fragment {
             super(view);
             guideimage = (de.hdodenhof.circleimageview.CircleImageView) view.findViewById(R.id.guideImage);
             guidename = (TextView) view.findViewById(R.id.guideName);
-            guideemail = (TextView) view.findViewById(R.id.guideName);
+            guideemail = (TextView) view.findViewById(R.id.guideEmail);
             ln = (LinearLayout) view.findViewById(R.id.linearLayoutGuide);
 
         }
     }
 
     private class fragment_guide_adapter extends RecyclerView.Adapter<GuideHolder> {
-        private ArrayList<model_guide> models;
+        private ArrayList<user> models;
 
-        public fragment_guide_adapter(ArrayList<model_guide> Models) {
+        public fragment_guide_adapter(ArrayList<user> Models) {
             models = Models;
         }
 
@@ -106,9 +130,9 @@ public class AdminGuidesFragmemnt extends Fragment {
 
         @Override
         public void onBindViewHolder(GuideHolder holder, int position) {
-            final model_guide modela = models.get(position);
-            holder.guideimage.setImageResource(modela.getImage());
-            holder.guidename.setText(modela.getName());
+            final user modela = models.get(position);
+            holder.guideimage.setImageResource(R.drawable.person4);
+            holder.guidename.setText(modela.getUsername());
             holder.guideemail.setText(modela.getEmail());
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
