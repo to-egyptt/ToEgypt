@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -156,15 +157,23 @@ public class AdminPlacesFragment extends Fragment {
                         startActivity(intent);
                     } else {
                         if (activityName.equals("User")) {
-                            Fragment fragment = new AdminPackagesFragment();
 
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("placeid", 1);
-                            fragment.setArguments(bundle);
+
+//                            Bundle bundle = new Bundle();
+//                            bundle.putInt("placeid", 1);
+//                            fragment.setArguments(bundle);
+
+                            Fragment fragment = new AdminPackagesFragment();
 
                             FragmentManager fragmentManager = getFragmentManager();
 
-                            fragmentManager.beginTransaction().replace(R.id.userContent, fragment).commit();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            fragmentTransaction.replace(R.id.userContent, fragment);
+
+                            fragmentTransaction.addToBackStack("packages");
+
+                            fragmentTransaction.commit();
                         }
                     }
                 }

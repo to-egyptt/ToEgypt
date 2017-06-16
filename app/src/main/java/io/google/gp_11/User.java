@@ -102,8 +102,8 @@ public class User extends AppCompatActivity {
 //                                fragmentClass = AdminProfileFragment.class;
 //                                mToolbar.setTitle("My Packages");
 //                                break;
-                            default:
-                                fragmentClass = AdminHomeFragment.class;
+//                            default:
+//                                fragmentClass = AdminHomeFragment.class;
                         }
 
                         try {
@@ -126,4 +126,17 @@ public class User extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+
+            fm.popBackStack();
+
+        } else {
+
+            super.onBackPressed();
+
+        }
+    }
 }
