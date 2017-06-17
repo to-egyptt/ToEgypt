@@ -25,26 +25,34 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Singleton;
 import models.ToEgyptAPI;
+import models.user;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AdminUpdateUser extends AppCompatActivity {
 
     private Uri mImageCaptureUri;
     ImageView banar1;
     private int mode;
+    private TextView username;
+    private TextView email;
+    private EditText fullname;
+    private EditText age;
+    private EditText phone;
+    private EditText country;
     private int user_id;
-    private String fullname;
-    private String username;
+    private String Fullname;
+    private String Username;
     private String Email;
-    private int age;
+    private int Age;
     private int country_id;
-    private int phones;
+    private int Phone;
     private Retrofit retrofit;
+    private user user;
     //user user;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
@@ -53,13 +61,13 @@ public class AdminUpdateUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TextView email = (TextView) findViewById(R.id.Email_profile);
-        TextView usernam = (TextView) findViewById(R.id.username_profile);
         setContentView(R.layout.activity_admin_update_user);
-        EditText fname = (EditText) findViewById(R.id.userFullName);
-        EditText Age = (EditText) findViewById(R.id.userAge);
-        EditText phone = (EditText) findViewById(R.id.userNumberPhone);
-        EditText country = (EditText) findViewById(R.id.userCountry);
+        email = (TextView) findViewById(R.id.Email_profile);
+        username = (TextView) findViewById(R.id.username_profile);
+        fullname = (EditText) findViewById(R.id.userFullName);
+        age = (EditText) findViewById(R.id.userAge);
+        phone = (EditText) findViewById(R.id.userNumberPhone);
+        country = (EditText) findViewById(R.id.userCountry);
         Button reset = (Button) findViewById(R.id.reset);
         Button delete = (Button) findViewById(R.id.delete);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -68,38 +76,34 @@ public class AdminUpdateUser extends AppCompatActivity {
         Intent i = getIntent();
         mode = i.getExtras().getInt("Mode");
         Bundle bundle = i.getExtras();
-        fullname = bundle.getString("fullname");
-        username = bundle.getString("username");
-        age = bundle.getInt("age");
-        country_id = bundle.getInt("country");
-        Email = bundle.getString("Email");
-        phones = bundle.getInt("phone");
+        fullname.setText(bundle.getString("fullname"));
+        email.setText(bundle.getString("Email"));
+        username.setText(bundle.getString("username"));
+        //err hena
+        age.setText(Integer.toString(bundle.getInt("age")));
+        country.setText(Integer.toString(bundle.getInt("country")));
+        phone.setText(Integer.toString(bundle.getInt("phone")));
         user_id = bundle.getInt("id");
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://2egyptwebservice.somee.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
+        Fullname = bundle.getString("fullname");
+        Email = bundle.getString("Email");
+        Username = bundle.getString("username");
+        country_id = bundle.getInt("country");
+        Phone = bundle.getInt("phone");
+        retrofit = Singleton.getRetrofit();
+        user = new user();
         //user= (models.user) i.getExtras().getSerializable("user");
         //mode = 1; // just show true false
         //mode = 2;  //want update true true
         if (mode == 1) {
             mToolbar.setTitle("Update User");
-            fname.setCursorVisible(false);
-            fname.setFocusable(false);
-            Age.setCursorVisible(false);
-            Age.setFocusable(false);
+            fullname.setCursorVisible(false);
+            fullname.setFocusable(false);
+            age.setCursorVisible(false);
+            age.setFocusable(false);
             phone.setCursorVisible(false);
             phone.setFocusable(false);
             country.setCursorVisible(false);
             country.setFocusable(false);
-            fname.setText(fullname);
-//            Age.setText(age);
-//            phone.setText(phones);
-//            country.setText(country_id);
-//            email.setText(Email);
-//            usernam.setText(username);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,13 +122,14 @@ public class AdminUpdateUser extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response) {
                                                 Toast.makeText(AdminUpdateUser.this, "Deleted", Toast.LENGTH_SHORT).show();
-
+                                                Intent i_to_admin = new Intent(AdminUpdateUser.this, Admin.class);
+                                                startActivity(i_to_admin);
+                                                finish();
                                             }
 
                                             @Override
                                             public void onFailure(Call<Void> call, Throwable t) {
-
-
+                                                Toast.makeText(AdminUpdateUser.this, "Not Deleted some thing error", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     } catch (Exception ex) {
@@ -159,6 +164,8 @@ public class AdminUpdateUser extends AppCompatActivity {
                     alertDialog.setPositiveButton("YES",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+
+                                    getuser(user_id);
                                     // Write your code here to execute after dialog
                                     Toast.makeText(AdminUpdateUser.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
                                 }
@@ -179,10 +186,10 @@ public class AdminUpdateUser extends AppCompatActivity {
         } else {
             if (mode == 2) {
                 mToolbar.setTitle("My profile");
-                fname.setCursorVisible(true);
-                fname.setFocusable(true);
-                Age.setCursorVisible(true);
-                Age.setFocusable(true);
+                fullname.setCursorVisible(true);
+                fullname.setFocusable(true);
+                age.setCursorVisible(true);
+                age.setFocusable(true);
                 phone.setCursorVisible(true);
                 phone.setFocusable(true);
                 country.setCursorVisible(true);
@@ -270,107 +277,6 @@ public class AdminUpdateUser extends AppCompatActivity {
             }
 
         }
-////<<<<<<< Updated
-////=======
-//        fname.setText(fullname);
-//        //Age.setText(age);
-//        //phone.setText(phones);
-//        //country.setText(country_id);
-//       // email.setText(Email);
-////        usernam.setText(username);
-//        if (mode == 2) {
-//            reset.setVisibility(View.GONE);
-//        }
-//        reset.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdateUser.this);
-//                alertDialog.setTitle("Confirm Reset ..");
-//                alertDialog.setMessage("Are you sure you want reset password for this user?");
-//                alertDialog.setIcon(R.drawable.reset);
-//                alertDialog.setPositiveButton("YES",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // Write your code here to execute after dialog
-//                                Toast.makeText(AdminUpdateUser.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                alertDialog.setNegativeButton("NO",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // Write your code here to execute after dialog
-//
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                // Showing Alert Message
-//                alertDialog.show();
-//            }
-//        });
-//        Button delete = (Button) findViewById(R.id.delete);
-//        if (mode == 1) {
-//            delete.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdateUser.this);
-//                    alertDialog.setTitle("Confirm Delete ..");
-//                    alertDialog.setMessage("Are you sure you want delete this user?");
-//                    alertDialog.setIcon(R.drawable.delete);
-//                    alertDialog.setPositiveButton("YES",
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//
-//
-//                                        try {
-//
-//                                            ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
-//                                            toEgyptAPI.deleteUser(user_id).enqueue(new Callback<Void>() {
-//                                                @Override
-//                                                public void onResponse(Call<Void> call, Response<Void> response) {
-//                                                    Toast.makeText(AdminUpdateUser.this, "Deleted", Toast.LENGTH_SHORT).show();
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onFailure(Call<Void> call, Throwable t) {
-//
-//
-//                                                }
-//                                            });
-//                                        }catch (Exception ex){
-//
-//
-//                                        }
-//
-//
-//
-//
-//                                    // Write your code here to execute after dialog
-//                                    Toast.makeText(AdminUpdateUser.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                    alertDialog.setNegativeButton("NO",
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    // Write your code here to execute after dialog
-//
-//                                    dialog.cancel();
-//                                }
-//                            });
-//
-//                    // Showing Alert Message
-//                    alertDialog.show();
-//                }
-//            });
-//        } else {
-//            if (mode == 2) {
-//                delete.setText("Update");
-//                // update listener
-//            }
-//        }
-//
-////>>>>>>> Stashed changes
 
     }
 
@@ -457,4 +363,41 @@ public class AdminUpdateUser extends AppCompatActivity {
             }
         }
     }
+
+    public void getuser(final int userId) {
+        ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
+        toEgyptAPI.getuser(userId).enqueue(new Callback<user>() {
+            @Override
+            public void onResponse(Call<user> call, Response<user> response) {
+                user = response.body();
+                resetpassword(userId, user);
+                Toast.makeText(AdminUpdateUser.this, "All is Good", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<user> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void resetpassword(int userId, user user1) {
+        user1.setPassword("p@ssw0rd");
+        ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
+        toEgyptAPI.updateUser(userId, user1).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccess()) {
+                    Toast.makeText(AdminUpdateUser.this, "Password Updated", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }

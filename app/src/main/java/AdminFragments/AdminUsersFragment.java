@@ -165,6 +165,7 @@ public class AdminUsersFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
                     Bundle bundle = new Bundle();
+                    //bundle.putSerializable("user",(Serializable) models.get(position));
                     bundle.putInt("id", models.get(position).getId());
                     bundle.putString("fullname", models.get(position).getFullname());
                     bundle.putString("username", models.get(position).getUsername());
