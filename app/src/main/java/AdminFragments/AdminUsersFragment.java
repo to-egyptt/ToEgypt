@@ -15,13 +15,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import AdminModels.model_user;
 import io.google.gp_11.AdminUpdateUser;
 import io.google.gp_11.R;
 import models.ResultUserSet;
 import models.Singleton;
 import models.ToEgyptAPI;
-import models.country;
 import models.user;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +29,6 @@ import retrofit2.Retrofit;
 public class AdminUsersFragment extends Fragment {
 
     private ArrayList<user> users;
-    private String country;
-    private ArrayList<model_user> userModels;
     private RecyclerView recyclerView;
     private fragment_user_adapter UserAdapter;
     private Retrofit retrofit;
@@ -97,30 +93,6 @@ public class AdminUsersFragment extends Fragment {
 
     }
 
-    private String getCountry(int id) {
-        final String[] country1 = {new String()};
-        try {
-
-            ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
-            Call<country> connection = toEgyptAPI.getCountry(id);
-            connection.enqueue(new Callback<country>() {
-                @Override
-                public void onResponse(Call<country> call, Response<country> response) {
-                    country1[0] = response.body().getName();
-                    //updateUI();
-                }
-
-                @Override
-                public void onFailure(Call<country> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception ex) {
-
-
-        }
-        return country1[0];
-    }
 
     private class UsersHolder extends RecyclerView.ViewHolder {
         de.hdodenhof.circleimageview.CircleImageView userimage;
@@ -156,10 +128,9 @@ public class AdminUsersFragment extends Fragment {
         public void onBindViewHolder(UsersHolder holder, final int position) {
 
             final user modela = models.get(position);
-            country = getCountry(modela.getId());
             holder.userimage.setImageResource(R.drawable.person1);
             holder.username.setText(modela.getUsername());
-            holder.usercounrty.setText(country);
+            holder.usercounrty.setText(modela.getCountry().getIso());
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -171,7 +142,7 @@ public class AdminUsersFragment extends Fragment {
                     bundle.putString("username", models.get(position).getUsername());
                     bundle.putInt("age", models.get(position).getAge());
                     bundle.putInt("phone", models.get(position).getPhonenumber());
-                    bundle.putInt("country", models.get(position).getCountryId());
+                    bundle.putString("country", models.get(position).getCountry().getNicename());
                     bundle.putInt("age", models.get(position).getAge());
                     bundle.putString("Email", models.get(position).getEmail());
 

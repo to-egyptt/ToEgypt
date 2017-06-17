@@ -14,7 +14,7 @@ import retrofit2.http.Url;
 
 public interface ToEgyptAPI {
 
-    @GET("/odata/users?$filter=type_id%20eq%202")
+    @GET("/odata/users?$expand=country&$filter=type_id%20eq%202")
     Call<ResultUserSet> getUsers();
 
     @GET("/odata/users({id})")
@@ -31,8 +31,5 @@ public interface ToEgyptAPI {
 
     @GET("/odata/users?$filter=type_id%20eq%203")
     Call<ResultUserSet> getGuide();
-
-    @GET("/odata/users({id})/country")
-    Call<country> getCountry(@Path("id") int id);
 }
 

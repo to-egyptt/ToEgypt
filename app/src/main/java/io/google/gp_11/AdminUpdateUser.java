@@ -81,13 +81,12 @@ public class AdminUpdateUser extends AppCompatActivity {
         username.setText(bundle.getString("username"));
         //err hena
         age.setText(Integer.toString(bundle.getInt("age")));
-        country.setText(Integer.toString(bundle.getInt("country")));
+        country.setText(bundle.getString("country"));
         phone.setText(Integer.toString(bundle.getInt("phone")));
         user_id = bundle.getInt("id");
         Fullname = bundle.getString("fullname");
         Email = bundle.getString("Email");
         Username = bundle.getString("username");
-        country_id = bundle.getInt("country");
         Phone = bundle.getInt("phone");
         retrofit = Singleton.getRetrofit();
         user = new user();
@@ -399,5 +398,6 @@ public class AdminUpdateUser extends AppCompatActivity {
         });
 
     }
+
 
 }

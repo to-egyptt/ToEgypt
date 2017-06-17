@@ -115,4 +115,14 @@ public class user {
         this.photo_path = photo_path;
     }
 
+    private country country;
+
+    public country getCountry() {
+        return this.country;
+    }
+
+    public void setCountry(country country) {
+        this.country = country;
+    }
+
 }
