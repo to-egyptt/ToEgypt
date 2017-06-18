@@ -264,10 +264,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                     plc = plc + packag.getPackageDetailes().get(i).getPlace().getName() + ",";
                 }
                 Places.setText(plc);
-                for (int i = 0; i < packag.getPackageDetailes().size(); i++) {
-                    prc += packag.getPackageDetailes().get(i).getPlace().getPriceTovisit();
-                }
-                Price.setText(String.valueOf(prc));
+
             }
 
             @Override
