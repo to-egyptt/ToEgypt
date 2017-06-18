@@ -66,7 +66,6 @@ public class AdminUpdatePackage extends AppCompatActivity
         guide = (Spinner) findViewById(R.id.tour_Guide);
         fromDateEtxt = (EditText) findViewById(R.id.etxt_fromdate);
         toDateEtxt = (EditText) findViewById(R.id.etxt_todate);
-        Price = (EditText) findViewById(R.id.packagePrice);
         Button Update = (Button) findViewById(R.id.updatePackage);
         Button delete = (Button) findViewById(R.id.deletePackage);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);

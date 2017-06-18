@@ -110,7 +110,7 @@ public class AdminPackagesFragment extends Fragment {
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPackages);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // updateUI();
+//         updateUI();
         return view;
     }
 
@@ -175,10 +175,15 @@ public class AdminPackagesFragment extends Fragment {
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-                    intent.putExtra("Mode", 1);
-                    intent.putExtra("package_id", modela.getId());
-                    startActivity(intent);
+                    activityName = getActivity().getClass().getSimpleName();
+                    if (activityName.equals("Admin")) {
+                        Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
+                        intent.putExtra("Mode", 1);
+                        intent.putExtra("package_id", modela.getId());
+                        startActivity(intent);
+                    } else if (activityName.equals("User")) {
+
+                    }
                 }
             });
 

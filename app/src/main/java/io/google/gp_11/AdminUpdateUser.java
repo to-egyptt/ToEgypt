@@ -113,6 +113,8 @@ public class AdminUpdateUser extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response) {
                                                 Toast.makeText(AdminUpdateUser.this, "Deleted", Toast.LENGTH_SHORT).show();
+
+
                                                 Intent i_to_admin = new Intent(AdminUpdateUser.this, Admin.class);
                                                 startActivity(i_to_admin);
                                                 finish();
@@ -128,8 +130,6 @@ public class AdminUpdateUser extends AppCompatActivity {
 
                                     }
 
-
-                                    Toast.makeText(AdminUpdateUser.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
                                 }
                             });
                     alertDialog.setNegativeButton("NO",
@@ -158,7 +158,7 @@ public class AdminUpdateUser extends AppCompatActivity {
 
                                     getuser(user_id);
                                     // Write your code here to execute after dialog
-                                    Toast.makeText(AdminUpdateUser.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
+
                                 }
                             });
                     alertDialog.setNegativeButton("NO",
@@ -373,7 +373,7 @@ public class AdminUpdateUser extends AppCompatActivity {
     }
 
     void resetpassword(int userId, user user1) {
-        user1.setPassword("p@ssw0rd");
+        user1.setPassword("p@$$w0rd");
         ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
         toEgyptAPI.updateUser(userId, user1).enqueue(new Callback<Void>() {
             @Override

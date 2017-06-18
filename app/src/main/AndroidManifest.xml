@@ -23,9 +23,8 @@
         <activity android:name=".AdminUpdateUser" />
         <activity android:name=".AdminUpdatePlace" />
         <activity android:name=".AdminUpdatePackage" />
-        <activity android:name=".User">
-
-        </activity>
+        <activity android:name=".User"></activity>
+        <activity android:name=".Guide"></activity>
     </application>
 
 </manifest>
