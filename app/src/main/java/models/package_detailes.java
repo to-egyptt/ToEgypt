@@ -32,4 +32,14 @@ public class package_detailes {
     public void setPlace_id(int place_id) {
         this.place_id = place_id;
     }
+
+    private place place;
+
+    public place getPlace() {
+        return this.place;
+    }
+
+    public void setPlace(place place) {
+        this.place = place;
+    }
 }

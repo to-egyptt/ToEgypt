@@ -37,6 +37,7 @@ public class AdminUpdateUser extends AppCompatActivity {
 
     private Uri mImageCaptureUri;
     ImageView banar1;
+    //private Spinner country1;
     private int mode;
     private TextView username;
     private TextView email;
@@ -45,12 +46,6 @@ public class AdminUpdateUser extends AppCompatActivity {
     private EditText phone;
     private EditText country;
     private int user_id;
-    private String Fullname;
-    private String Username;
-    private String Email;
-    private int Age;
-    private int country_id;
-    private int Phone;
     private Retrofit retrofit;
     private user user;
     //user user;
@@ -68,6 +63,7 @@ public class AdminUpdateUser extends AppCompatActivity {
         age = (EditText) findViewById(R.id.userAge);
         phone = (EditText) findViewById(R.id.userNumberPhone);
         country = (EditText) findViewById(R.id.userCountry);
+        //country1=(Spinner)findViewById(R.id.userCountry1);
         Button reset = (Button) findViewById(R.id.reset);
         Button delete = (Button) findViewById(R.id.delete);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -84,10 +80,6 @@ public class AdminUpdateUser extends AppCompatActivity {
         country.setText(bundle.getString("country"));
         phone.setText(Integer.toString(bundle.getInt("phone")));
         user_id = bundle.getInt("id");
-        Fullname = bundle.getString("fullname");
-        Email = bundle.getString("Email");
-        Username = bundle.getString("username");
-        Phone = bundle.getInt("phone");
         retrofit = Singleton.getRetrofit();
         user = new user();
         //user= (models.user) i.getExtras().getSerializable("user");
@@ -399,5 +391,22 @@ public class AdminUpdateUser extends AppCompatActivity {
 
     }
 
+//    void fillSpinner(){
+//        final ArrayList<country>countries=new ArrayList<>();
+//        ToEgyptAPI toEgyptAPI=retrofit.create(ToEgyptAPI.class);
+//        toEgyptAPI.getCountries().enqueue(new Callback<ResultCountrySet>() {
+//            @Override
+//            public void onResponse(Call<ResultCountrySet> call, Response<ResultCountrySet> response) {
+//                countries=response.body().getCountries();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResultCountrySet> call, Throwable t) {
+//
+//            }
+//        });
 
 }
+
+
+

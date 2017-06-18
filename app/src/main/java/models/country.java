@@ -74,4 +74,9 @@ public class country {
     public void setPhonecode(int phonecode) {
         this.phonecode = phonecode;
     }
+
+    @Override
+    public String toString() {
+        return nicename;
+    }
 }

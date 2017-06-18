@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -78,5 +79,25 @@ public class packag {
 
     public void setEnd_date(Date end_date) {
         this.end_date = end_date;
+    }
+
+    private ArrayList<package_detailes> package_detailes;
+
+    public ArrayList<package_detailes> getPackageDetailes() {
+        return this.package_detailes;
+    }
+
+    public void setPackageDetailes(ArrayList<package_detailes> package_detailes) {
+        this.package_detailes = package_detailes;
+    }
+
+    private user user;
+
+    public user getUser() {
+        return this.user;
+    }
+
+    public void setUser(user user) {
+        this.user = user;
     }
 }

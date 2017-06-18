@@ -31,5 +31,20 @@ public interface ToEgyptAPI {
 
     @GET("/odata/users?$filter=type_id%20eq%203")
     Call<ResultUserSet> getGuide();
+
+    @GET("/odata/countries")
+    Call<ResultCountrySet> getCountries();
+
+    @GET("/odata/packages?$expand=package_detailes($expand=place),user")
+    Call<ResultpakageSet> getPackages();
+
+    @GET("/odata/packages({id})?$expand=package_detailes($expand=place),user")
+    Call<packag> getPackage(@Path("id") int id);
+
+    @DELETE("/odata/packages({id})")
+    Call<Void> deletePackage(@Path("id") int id);
+
+    @GET("/odata/places")
+    Call<ResultPlaceSet> getPlaces();
 }
 

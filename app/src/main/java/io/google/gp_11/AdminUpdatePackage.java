@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,17 +19,38 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
+
+import models.ResultPlaceSet;
+import models.ResultUserSet;
+import models.Singleton;
+import models.ToEgyptAPI;
+import models.packag;
+import models.place;
+import models.user;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class AdminUpdatePackage extends AppCompatActivity
         //implements View.OnClickListener
 {
-
+    private ArrayList<place> places;
+    private boolean[] checkedItem;
+    private ArrayList<Integer> muserItems;
+    private ArrayList<user> guides;
+    private Retrofit retrofit;
+    private EditText package_name;
+    private EditText Places;
+    private Spinner guide;
+    private EditText Price;
+    private packag packag;
     private EditText fromDateEtxt;
     private EditText toDateEtxt;
     private int mode;
+    private int package_id;
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
@@ -40,14 +60,13 @@ public class AdminUpdatePackage extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_update_package);
-
-        EditText package_name = (EditText) findViewById(R.id.packageName);
-        EditText Places = (EditText) findViewById(R.id.packagePlaces);
-        Spinner guide = (Spinner) findViewById(R.id.tour_Guide);
+        retrofit = Singleton.getRetrofit();
+        package_name = (EditText) findViewById(R.id.packageName);
+        Places = (EditText) findViewById(R.id.packagePlaces);
+        guide = (Spinner) findViewById(R.id.tour_Guide);
         fromDateEtxt = (EditText) findViewById(R.id.etxt_fromdate);
         toDateEtxt = (EditText) findViewById(R.id.etxt_todate);
-        EditText Price = (EditText) findViewById(R.id.packagePrice);
-
+        Price = (EditText) findViewById(R.id.packagePrice);
         Button Update = (Button) findViewById(R.id.updatePackage);
         Button delete = (Button) findViewById(R.id.deletePackage);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -57,42 +76,55 @@ public class AdminUpdatePackage extends AppCompatActivity
         fromDateEtxt.requestFocus();
         toDateEtxt = (EditText) findViewById(R.id.etxt_todate);
         toDateEtxt.setInputType(InputType.TYPE_NULL);
-
-
-        List<String> guides = new ArrayList<String>();
-        guides.add("abuelhassen");
-        guides.add("tifa");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, guides);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        guide.setAdapter(dataAdapter);
-        guide.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String assigned_guide = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
+        setGuideSpinner();
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-
         setDateTimeField();
-
-
         Intent i = getIntent();
         mode = i.getExtras().getInt("Mode");
 
         if (mode == 1) {
+
+            Places.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+                    api.getPlaces().enqueue(new Callback<ResultPlaceSet>() {
+                        @Override
+                        public void onResponse(Call<ResultPlaceSet> call, Response<ResultPlaceSet> response) {
+                            places = response.body().getValue();
+                            checkedItem = new boolean[places.size()];
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AdminUpdatePackage.this);
+                            builder.setTitle("Choose Your Places");
+//                            builder.setMultiChoiceItems(places, checkedItem, new DialogInterface.OnMultiChoiceClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+//                                    if (isChecked){
+//                                        if(!muserItems.contains(which)) {
+//                                            muserItems.add(which);
+//                                        }else {
+//                                            muserItems.remove(which);
+//                                        }
+//
+//                                    }
+//                                }
+//                            })
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResultPlaceSet> call, Throwable t) {
+
+                        }
+                    });
+                }
+            });
+            package_id = i.getExtras().getInt("package_id");
+            setForms(package_id);
             mToolbar.setTitle("Update Package");
             Update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Toast.makeText(AdminUpdatePackage.this, "Package updated", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -106,8 +138,24 @@ public class AdminUpdatePackage extends AppCompatActivity
                     alertDialog.setPositiveButton("YES",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+                                    api.deletePackage(package_id).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            if (response.isSuccess()) {
+                                                Toast.makeText(AdminUpdatePackage.this, "Deleted sucssfully", Toast.LENGTH_SHORT).show();
+                                                Intent i_to_admin = new Intent(AdminUpdatePackage.this, Admin.class);
+                                                startActivity(i_to_admin);
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+
+                                        }
+                                    });
                                     // Write your code here to execute after dialog
-                                    Toast.makeText(AdminUpdatePackage.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
                                 }
                             });
                     alertDialog.setNegativeButton("NO",
@@ -124,6 +172,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                 }
             });
 
+
         } else {
             if (mode == 2) {
                 mToolbar.setTitle("Create Package");
@@ -132,6 +181,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Toast.makeText(AdminUpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -180,5 +230,52 @@ public class AdminUpdatePackage extends AppCompatActivity
 
     }
 
+
+    public void setGuideSpinner() {
+        ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+        api.getGuide().enqueue(new Callback<ResultUserSet>() {
+            @Override
+            public void onResponse(Call<ResultUserSet> call, Response<ResultUserSet> response) {
+                if (response.isSuccess()) {
+                    guides = (ArrayList<user>) response.body().getUsers();
+                    ArrayAdapter<user> userArrayAdapter = new ArrayAdapter<user>(AdminUpdatePackage.this, R.layout.support_simple_spinner_dropdown_item, guides);
+                    guide.setAdapter(userArrayAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultUserSet> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void setForms(int id) {
+        ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+        api.getPackage(id).enqueue(new Callback<packag>() {
+            @Override
+            public void onResponse(Call<packag> call, Response<packag> response) {
+                String plc = "";
+                double prc = 0;
+                packag = response.body();
+                package_name.setText(packag.getName());
+                fromDateEtxt.setText(String.valueOf(packag.getStart_date()).replace(String.valueOf(packag.getStart_date()).substring(10, 30), " "));
+                toDateEtxt.setText(String.valueOf(packag.getEnd_date()).replace(String.valueOf(packag.getEnd_date()).substring(10, 30), " "));
+                for (int i = 0; i < packag.getPackageDetailes().size(); i++) {
+                    plc = plc + packag.getPackageDetailes().get(i).getPlace().getName() + ",";
+                }
+                Places.setText(plc);
+                for (int i = 0; i < packag.getPackageDetailes().size(); i++) {
+                    prc += packag.getPackageDetailes().get(i).getPlace().getPriceTovisit();
+                }
+                Price.setText(String.valueOf(prc));
+            }
+
+            @Override
+            public void onFailure(Call<packag> call, Throwable t) {
+
+            }
+        });
+    }
 }
 
