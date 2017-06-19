@@ -92,22 +92,6 @@ public class AdminUpdatePackage extends AppCompatActivity
                         public void onResponse(Call<ResultPlaceSet> call, Response<ResultPlaceSet> response) {
                             places = response.body().getValue();
                             checkedItem = new boolean[places.size()];
-                            AlertDialog.Builder builder = new AlertDialog.Builder(AdminUpdatePackage.this);
-                            builder.setTitle("Choose Your Places");
-//                            builder.setMultiChoiceItems(places, checkedItem, new DialogInterface.OnMultiChoiceClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                                    if (isChecked){
-//                                        if(!muserItems.contains(which)) {
-//                                            muserItems.add(which);
-//                                        }else {
-//                                            muserItems.remove(which);
-//                                        }
-//
-//                                    }
-//                                }
-//                            })
-
                         }
 
                         @Override
