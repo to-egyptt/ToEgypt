@@ -1,5 +1,8 @@
 package models;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -21,9 +24,17 @@ public class Singleton {
             retrofit = new Retrofit.Builder()
                     .baseUrl("http://2egyptwebservice.somee.com")
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(getRequestHeader())
                     .build();
         }
         return retrofit;
     }
 
+    private static OkHttpClient getRequestHeader() {
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .build();
+        return okHttpClient;
+    }
 }

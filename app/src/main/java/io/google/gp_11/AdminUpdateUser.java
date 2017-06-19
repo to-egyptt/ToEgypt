@@ -367,7 +367,8 @@ public class AdminUpdateUser extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<user> call, Throwable t) {
-
+                Toast.makeText(AdminUpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
             }
         });
     }
@@ -385,6 +386,8 @@ public class AdminUpdateUser extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(AdminUpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
 
             }
         });

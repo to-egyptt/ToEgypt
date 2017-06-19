@@ -14,10 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 
 import BL.Session;
@@ -103,18 +99,6 @@ public class MainActivity extends AppCompatActivity {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public boolean isOnline() {
-        try {
-            int timeoutMs = 1500;
-            Socket sock = new Socket();
-            SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
-            sock.connect(sockaddr, timeoutMs);
-            sock.close();
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
 
     public void login(String username, String Password) {
@@ -172,7 +156,10 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResultUserSet> call, Throwable t) {
-
+                    Button sign_in = (Button) findViewById(R.id.sing_in);
+                    Toast.makeText(MainActivity.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                    sign_in.setText("sign in");
+                    //progressDialog.dismiss();
                 }
             });
         } catch (Exception ex) {

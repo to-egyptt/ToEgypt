@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,8 @@ public class AdminUsersFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ResultUserSet> call, Throwable t) {
-
+                    Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
             });
         } catch (Exception ex) {

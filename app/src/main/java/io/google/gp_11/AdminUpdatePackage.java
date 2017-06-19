@@ -98,7 +98,8 @@ public class AdminUpdatePackage extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<ResultPlaceSet> call, Throwable t) {
-
+                            Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                            //progressDialog.dismiss();
                         }
                     });
                 }
@@ -267,7 +268,8 @@ public class AdminUpdatePackage extends AppCompatActivity
 
             @Override
             public void onFailure(Call<ResultUserSet> call, Throwable t) {
-
+                Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
             }
         });
     }
@@ -292,7 +294,8 @@ public class AdminUpdatePackage extends AppCompatActivity
 
             @Override
             public void onFailure(Call<packag> call, Throwable t) {
-
+                Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
             }
         });
     }

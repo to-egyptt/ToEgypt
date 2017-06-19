@@ -1,6 +1,7 @@
 package AdminFragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import AdminModels.model_package;
 import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdatePackage;
 import io.google.gp_11.R;
@@ -38,19 +38,12 @@ import retrofit2.Retrofit;
 public class AdminPackagesFragment extends Fragment {
 
     private ArrayList<packag> packages;
-    private String[] Start = {"Start 1/6/2017 12:00", "Start 5/6/2017 12:00", "Start 7/6/2017 12:00"};
-    private String[] End = {"End 8/6/2017 12:00", "End 8/6/2017 12:00", "End 8/6/2017 12:00"};
-    private String[] pckgname = {"Package1", "Package2", "Package3"};
-    private String[] placesinpackage = {"pyramids ,sinai", "Helwan ,sinai", "Cairo Tower"};
-    private String[] TIME = {"6h 21m", "8h 11m", "4h 40m"};
-    private String[] PRICE = {"21,685 USD", "45,421 USD", "22,500 USD"};
     private Retrofit retrofit;
-    private ArrayList<model_package> packageModels;
     private RecyclerView recyclerView;
     private fragment_package_adapter PackageAdapter;
     private String activityName;
     private int placeId;
-
+    private ProgressDialog progressDialog;
     public AdminPackagesFragment() {
         // Required empty public constructor
     }
@@ -58,17 +51,16 @@ public class AdminPackagesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Retrieving data. please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             placeId = bundle.getInt("placeId");
 
         }
 
-        packageModels = new ArrayList<>();
-        for (int i = 0; i < Start.length; i++) {
-            model_package PackageModelForRecyclerView = new model_package(pckgname[i], placesinpackage[i], Start[i], End[i], TIME[i], PRICE[i]);
-            packageModels.add(PackageModelForRecyclerView);
-        }
         retrofit = Singleton.getRetrofit();
         ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
         api.getPackages().enqueue(new Callback<ResultpakageSet>() {
@@ -76,11 +68,13 @@ public class AdminPackagesFragment extends Fragment {
             public void onResponse(Call<ResultpakageSet> call, Response<ResultpakageSet> response) {
                 packages = response.body().getValue();
                 updateUI();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResultpakageSet> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
         super.onCreate(savedInstanceState);
