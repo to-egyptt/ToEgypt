@@ -154,11 +154,18 @@ public class AdminGuidesFragmemnt extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
-//<<<<<<< Updated upstream
                     intent.putExtra("Mode", 1);
-//=======
-//                    intent.putExtra("Mode",1);
-//>>>>>>> Stashed changes
+                    Bundle bundle = new Bundle();
+                    //bundle.putSerializable("user",(Serializable) models.get(position));
+                    bundle.putInt("id", modela.getId());
+                    bundle.putString("fullname", modela.getFullname());
+                    bundle.putString("username", modela.getUsername());
+                    bundle.putInt("age", modela.getAge());
+                    bundle.putInt("phone", modela.getPhonenumber());
+                    bundle.putString("country", modela.getCountry().getNicename());
+                    bundle.putInt("age", modela.getAge());
+                    bundle.putString("Email", modela.getEmail());
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
                 }

@@ -29,7 +29,7 @@ public interface ToEgyptAPI {
     @GET
     Call<ResultUserSet> login(@Url String url);
 
-    @GET("/odata/users?$filter=type_id%20eq%203")
+    @GET("/odata/users?$expand=country&$filter=type_id%20eq%203")
     Call<ResultUserSet> getGuide();
 
     @GET("/odata/countries")
