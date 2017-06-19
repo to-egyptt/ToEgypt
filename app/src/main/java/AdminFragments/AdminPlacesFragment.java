@@ -177,7 +177,7 @@ public class AdminPlacesFragment extends Fragment {
 
                             fragmentTransaction.replace(R.id.userContent, fragment);
 
-                            fragmentTransaction.addToBackStack("packages");
+                            fragmentTransaction.addToBackStack(null);
 
                             fragmentTransaction.commit();
                         }

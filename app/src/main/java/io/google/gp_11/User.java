@@ -84,6 +84,9 @@ public class User extends AppCompatActivity {
 //                                Intent intent = new Intent(User.this, AdminUpdateUser.class);
 //                                intent.putExtra("Mode", 2);
 //                                startActivity(intent);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("mode", 2);
+                                fragment.setArguments(bundle);
                                 break;
                             case R.id.nav_logout:
                                 session.setLoggedIn(false);
@@ -132,6 +135,7 @@ public class User extends AppCompatActivity {
 
         }
     }
+
 
     public void setActionBarTitle(String title) {
         mToolbar.setTitle(title);

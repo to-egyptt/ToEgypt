@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -82,10 +84,19 @@ public class AdminGuidesFragmemnt extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Click action
-                Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
-                intent.putExtra("Mode", 3);
-                startActivity(intent);
+//                Click action
+//                Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
+//                intent.putExtra("Mode", 3);
+//                startActivity(intent);
+                Fragment fragment = new AdminProfileFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("mode", 1);
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.adminContent, fragment);
+                transaction.addToBackStack("Packages");
+                transaction.commit();
             }
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewGuides);

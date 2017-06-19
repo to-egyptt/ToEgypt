@@ -263,18 +263,11 @@
                 android:weightSum="1">
 
                 <Button
-                    android:id="@+id/reset"
-                    android:layout_width="55dp"
+                    android:id="@+id/create"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Rest Password" />
+                    android:text="Create" />
 
-                <Button
-                    android:id="@+id/delete"
-                    android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Delete" />
             </LinearLayout>
 
         </LinearLayout>

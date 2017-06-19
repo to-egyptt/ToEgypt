@@ -110,6 +110,10 @@ public class Admin extends AppCompatActivity {
                                 break;
                             case R.id.nav_profile:
                                 fragmentClass = AdminProfileFragment.class;
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("mode", 2);
+                                fragment.setArguments(bundle);
+
 //                                Intent intent = new Intent(Admin.this, AdminUpdateUser.class);
 //                                intent.putExtra("Mode", 2);
 //                                startActivity(intent);

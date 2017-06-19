@@ -96,6 +96,17 @@ public class AdminPackagesFragment extends Fragment {
             hint.setText("select package to edit");
             ((Admin) getActivity()).setActionBarTitle("Packages");
             ((Admin) getActivity()).setMenuItem(3);
+            fab.setImageResource(R.drawable.addpackage);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Click action
+                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
+                    intent.putExtra("Mode", 2);
+                    startActivity(intent);
+
+                }
+            });
 
         } else {
             if (activityName.equals("User")) {
@@ -105,16 +116,7 @@ public class AdminPackagesFragment extends Fragment {
                 fab.setVisibility(View.GONE);
             }
         }
-        fab.setImageResource(R.drawable.addpackage);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-                intent.putExtra("Mode", 2);
-                startActivity(intent);
-            }
-        });
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPackages);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //         updateUI();
