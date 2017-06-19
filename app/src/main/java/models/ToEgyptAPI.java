@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
@@ -17,7 +18,7 @@ public interface ToEgyptAPI {
     @GET("/odata/users?$expand=country&$filter=type_id%20eq%202")
     Call<ResultUserSet> getUsers();
 
-    @GET("/odata/users({id})")
+    @GET("/odata/users({id})?$expand=country")
     Call<user> getuser(@Path("id") int id);
 
     @DELETE("/odata/users({id})")
@@ -46,5 +47,14 @@ public interface ToEgyptAPI {
 
     @GET("/odata/places")
     Call<ResultPlaceSet> getPlaces();
+
+    @POST("/odata/users")
+    Call<user> addUser(@Body user user);
+
+    @GET("odata/users/$count/?$filter=type_id%20eq%202")
+    Call<Integer> getUsersCount();
+
+    @GET("odata/users/$count/?$filter=type_id%20eq%203")
+    Call<Integer> getGuideCount();
 }
 

@@ -289,6 +289,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                     plc = plc + packag.getPackageDetailes().get(i).getPlace().getName() + ",";
                 }
                 Places.setText(plc);
+                description.setText(packag.getDescription());
 
             }
 
