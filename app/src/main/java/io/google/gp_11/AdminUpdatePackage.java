@@ -172,19 +172,52 @@ public class AdminUpdatePackage extends AppCompatActivity
             });
 
 
-        } else {
-            if (mode == 2) {
-                mToolbar.setTitle("Create Package");
-                Update.setVisibility(View.GONE);
-                delete.setText("Create");
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        } else if (mode == 2) {
+            mToolbar.setTitle("Create Package");
+            Update.setVisibility(View.GONE);
+            delete.setText("Create");
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        Toast.makeText(AdminUpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    Toast.makeText(AdminUpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if (mode == 3) { // pckg details
+            mToolbar.setTitle("Package Details");
+            Update.setVisibility(View.GONE);
+            delete.setText("Join");
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdatePackage.this);
+                    alertDialog.setTitle("Confirm Join ..");
+                    alertDialog.setMessage("Are you sure you want Join to this Package?");
+                    alertDialog.setIcon(R.drawable.success);
+                    alertDialog.setPositiveButton("YES",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to execute after dialog
+
+                                    Intent i_to_admin = new Intent(AdminUpdatePackage.this, Admin.class); // navigate to my package
+                                    startActivity(i_to_admin);
+                                    finish();
+
+                                }
+                            });
+                    alertDialog.setNegativeButton("NO",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to execute after dialog
+
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+            });
         }
     }
 

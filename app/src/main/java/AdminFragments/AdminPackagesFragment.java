@@ -192,14 +192,15 @@ public class AdminPackagesFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     activityName = getActivity().getClass().getSimpleName();
-                    if (activityName.equals("Admin")) {
-                        Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-                        intent.putExtra("Mode", 1);
-                        intent.putExtra("package_id", modela.getId());
-                        startActivity(intent);
-                    } else if (activityName.equals("User")) {
+                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
 
+                    if (activityName.equals("Admin")) {
+                        intent.putExtra("Mode", 1);
+                    } else if (activityName.equals("User")) {
+                        intent.putExtra("Mode", 3);
                     }
+                    intent.putExtra("package_id", modela.getId());
+                    startActivity(intent);
                 }
             });
 
