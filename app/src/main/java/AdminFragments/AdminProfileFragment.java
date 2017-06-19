@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import io.google.gp_11.Admin;
 import io.google.gp_11.R;
@@ -51,7 +52,8 @@ public class AdminProfileFragment extends Fragment {
         } else if (activityName.equals("User")) {
             ((User) getActivity()).setActionBarTitle("Profile");
             ((User) getActivity()).setMenuItem(4);
-
+            Button update = (Button) view.findViewById(R.id.create);
+            update.setText("Update");
         }
         return view;
     }

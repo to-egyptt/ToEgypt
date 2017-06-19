@@ -45,6 +45,7 @@ public class AdminUpdatePackage extends AppCompatActivity
     private EditText package_name;
     private EditText Places;
     private Spinner guide;
+    private EditText description;
     private EditText Price;
     private packag packag;
     private EditText fromDateEtxt;
@@ -66,6 +67,7 @@ public class AdminUpdatePackage extends AppCompatActivity
         guide = (Spinner) findViewById(R.id.tour_Guide);
         fromDateEtxt = (EditText) findViewById(R.id.etxt_fromdate);
         toDateEtxt = (EditText) findViewById(R.id.etxt_todate);
+        description = (EditText) findViewById(R.id.packageDescription);
         Button Update = (Button) findViewById(R.id.updatePackage);
         Button delete = (Button) findViewById(R.id.deletePackage);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
@@ -185,6 +187,10 @@ public class AdminUpdatePackage extends AppCompatActivity
             });
         } else if (mode == 3) { // pckg details
             mToolbar.setTitle("Package Details");
+            package_name.setCursorVisible(false);
+            package_name.setFocusable(false);
+            description.setCursorVisible(false);
+            description.setFocusable(false);
             Update.setVisibility(View.GONE);
             delete.setText("Join");
             delete.setOnClickListener(new View.OnClickListener() {
