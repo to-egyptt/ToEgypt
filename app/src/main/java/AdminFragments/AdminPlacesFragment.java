@@ -20,8 +20,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import AdminModels.model_place;
+import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdatePlace;
 import io.google.gp_11.R;
+import io.google.gp_11.User;
 
 
 /**
@@ -77,10 +79,14 @@ public class AdminPlacesFragment extends Fragment {
         activityName = getActivity().getClass().getSimpleName();
         if (activityName.equals("Admin")) {
             hint.setText("select place to edit");
+            ((Admin) getActivity()).setActionBarTitle("Places");
+            ((Admin) getActivity()).setMenuItem(4);
 
         } else {
             if (activityName.equals("User")) {
                 hint.setText("select place to show all packages that belongs to this place");
+                ((User) getActivity()).setActionBarTitle("Places");
+                ((User) getActivity()).setMenuItem(0);
                 fab.setVisibility(View.GONE);
             }
         }
@@ -158,12 +164,11 @@ public class AdminPlacesFragment extends Fragment {
                     } else {
                         if (activityName.equals("User")) {
 
-
-//                            Bundle bundle = new Bundle();
-//                            bundle.putInt("placeid", 1);
-//                            fragment.setArguments(bundle);
-
                             Fragment fragment = new AdminPackagesFragment();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("placeId", 1);
+                            fragment.setArguments(bundle);
 
                             FragmentManager fragmentManager = getFragmentManager();
 
@@ -171,7 +176,7 @@ public class AdminPlacesFragment extends Fragment {
 
                             fragmentTransaction.replace(R.id.userContent, fragment);
 
-                            fragmentTransaction.addToBackStack("packages");
+                            fragmentTransaction.addToBackStack(null);
 
                             fragmentTransaction.commit();
                         }

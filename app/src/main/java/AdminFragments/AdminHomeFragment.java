@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.google.gp_11.Admin;
 import io.google.gp_11.R;
 
 public class AdminHomeFragment extends Fragment {
@@ -26,6 +27,7 @@ public class AdminHomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home_admin, container, false);
+        ((Admin) getActivity()).setActionBarTitle("Home");
         return view;
     }
 

@@ -7,11 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import io.google.gp_11.Admin;
 import io.google.gp_11.R;
+import io.google.gp_11.User;
 
 
 public class AdminProfileFragment extends Fragment {
+
+    private String activityName;
+    private int mode;
 
 
     public AdminProfileFragment() {
@@ -22,6 +28,11 @@ public class AdminProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mode = bundle.getInt("mode");
+
+        }
 
     }
 
@@ -29,8 +40,22 @@ public class AdminProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        activityName = getActivity().getClass().getSimpleName();
 
+        if (mode == 1) {
+            ((Admin) getActivity()).setActionBarTitle("Add Guide");
+            ((Admin) getActivity()).setMenuItem(2);
+        } else if (activityName.equals("Admin")) {
+            ((Admin) getActivity()).setActionBarTitle("Profile");
+            ((Admin) getActivity()).setMenuItem(5);
+        } else if (activityName.equals("User")) {
+            ((User) getActivity()).setActionBarTitle("Profile");
+            ((User) getActivity()).setMenuItem(4);
+            Button update = (Button) view.findViewById(R.id.create);
+            update.setText("Update");
+        }
+        return view;
     }
 
     @Override

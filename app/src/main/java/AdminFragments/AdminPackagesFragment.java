@@ -13,12 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import AdminModels.model_package;
+import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdatePackage;
 import io.google.gp_11.R;
+import io.google.gp_11.User;
 import models.ResultpakageSet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -46,6 +49,7 @@ public class AdminPackagesFragment extends Fragment {
     private RecyclerView recyclerView;
     private fragment_package_adapter PackageAdapter;
     private String activityName;
+    private int placeId;
 
     public AdminPackagesFragment() {
         // Required empty public constructor
@@ -54,6 +58,12 @@ public class AdminPackagesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            placeId = bundle.getInt("placeId");
+
+        }
+
         packageModels = new ArrayList<>();
         for (int i = 0; i < Start.length; i++) {
             model_package PackageModelForRecyclerView = new model_package(pckgname[i], placesinpackage[i], Start[i], End[i], TIME[i], PRICE[i]);
@@ -73,10 +83,6 @@ public class AdminPackagesFragment extends Fragment {
 
             }
         });
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            int myInt = bundle.getInt("placeid", defaultValue);
-//        }
         super.onCreate(savedInstanceState);
 
     }
@@ -87,27 +93,37 @@ public class AdminPackagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_packages_admin, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         TextView hint = (TextView) view.findViewById(R.id.packageHint);
         activityName = getActivity().getClass().getSimpleName();
         if (activityName.equals("Admin")) {
             hint.setText("select package to edit");
+            ((Admin) getActivity()).setActionBarTitle("Packages");
+            ((Admin) getActivity()).setMenuItem(3);
+            fab.setImageResource(R.drawable.addpackage);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Click action
+                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
+                    intent.putExtra("Mode", 2);
+                    startActivity(intent);
+
+                }
+            });
 
         } else {
             if (activityName.equals("User")) {
                 hint.setText("select package to see details and join");
+                ((User) getActivity()).setActionBarTitle("Packages");
+                ((User) getActivity()).setMenuItem(1);
+                if (placeId == 1) {
+                    Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
+                }
                 fab.setVisibility(View.GONE);
             }
         }
-        fab.setImageResource(R.drawable.addpackage);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-                intent.putExtra("Mode", 2);
-                startActivity(intent);
-            }
-        });
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPackages);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //         updateUI();
@@ -176,14 +192,15 @@ public class AdminPackagesFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     activityName = getActivity().getClass().getSimpleName();
-                    if (activityName.equals("Admin")) {
-                        Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-                        intent.putExtra("Mode", 1);
-                        intent.putExtra("package_id", modela.getId());
-                        startActivity(intent);
-                    } else if (activityName.equals("User")) {
+                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
 
+                    if (activityName.equals("Admin")) {
+                        intent.putExtra("Mode", 1);
+                    } else if (activityName.equals("User")) {
+                        intent.putExtra("Mode", 3);
                     }
+                    intent.putExtra("package_id", modela.getId());
+                    startActivity(intent);
                 }
             });
 
