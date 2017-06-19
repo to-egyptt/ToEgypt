@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import AdminFragments.AdminHomeFragment;
 import AdminFragments.AdminPackagesFragment;
 import AdminFragments.AdminPlacesFragment;
 import AdminFragments.AdminProfileFragment;
@@ -67,7 +66,7 @@ public class User extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         Fragment fragment = null;
-                        Class fragmentClass = AdminHomeFragment.class;
+                        Class fragmentClass = AdminPlacesFragment.class;
                         switch (menuItem.getItemId()) {
                             case R.id.nav_packages:
                                 fragmentClass = AdminPackagesFragment.class;
@@ -84,9 +83,7 @@ public class User extends AppCompatActivity {
 //                                Intent intent = new Intent(User.this, AdminUpdateUser.class);
 //                                intent.putExtra("Mode", 2);
 //                                startActivity(intent);
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("mode", 2);
-                                fragment.setArguments(bundle);
+
                                 break;
                             case R.id.nav_logout:
                                 session.setLoggedIn(false);

@@ -164,12 +164,11 @@ public class AdminPlacesFragment extends Fragment {
                     } else {
                         if (activityName.equals("User")) {
 
-
-//                            Bundle bundle = new Bundle();
-//                            bundle.putInt("placeid", 1);
-//                            fragment.setArguments(bundle);
-
                             Fragment fragment = new AdminPackagesFragment();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("placeId", 1);
+                            fragment.setArguments(bundle);
 
                             FragmentManager fragmentManager = getFragmentManager();
 

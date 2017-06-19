@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class AdminPackagesFragment extends Fragment {
     private RecyclerView recyclerView;
     private fragment_package_adapter PackageAdapter;
     private String activityName;
+    private int placeId;
 
     public AdminPackagesFragment() {
         // Required empty public constructor
@@ -56,6 +58,12 @@ public class AdminPackagesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            placeId = bundle.getInt("placeId");
+
+        }
+
         packageModels = new ArrayList<>();
         for (int i = 0; i < Start.length; i++) {
             model_package PackageModelForRecyclerView = new model_package(pckgname[i], placesinpackage[i], Start[i], End[i], TIME[i], PRICE[i]);
@@ -75,10 +83,6 @@ public class AdminPackagesFragment extends Fragment {
 
             }
         });
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            int myInt = bundle.getInt("placeid", defaultValue);
-//        }
         super.onCreate(savedInstanceState);
 
     }
@@ -113,6 +117,9 @@ public class AdminPackagesFragment extends Fragment {
                 hint.setText("select package to see details and join");
                 ((User) getActivity()).setActionBarTitle("Packages");
                 ((User) getActivity()).setMenuItem(1);
+                if (placeId == 1) {
+                    Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
+                }
                 fab.setVisibility(View.GONE);
             }
         }
