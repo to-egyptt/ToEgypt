@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdateUser;
 import io.google.gp_11.R;
 import models.ResultUserSet;
@@ -75,6 +76,8 @@ public class AdminGuidesFragmemnt extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_guides_admin, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        ((Admin) getActivity()).setActionBarTitle("Guides");
+        ((Admin) getActivity()).setMenuItem(2);
         fab.setImageResource(R.drawable.adduser);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

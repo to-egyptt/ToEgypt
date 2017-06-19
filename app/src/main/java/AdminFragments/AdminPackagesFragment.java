@@ -17,8 +17,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import AdminModels.model_package;
+import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdatePackage;
 import io.google.gp_11.R;
+import io.google.gp_11.User;
 import models.ResultpakageSet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -87,14 +89,19 @@ public class AdminPackagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_packages_admin, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         TextView hint = (TextView) view.findViewById(R.id.packageHint);
         activityName = getActivity().getClass().getSimpleName();
         if (activityName.equals("Admin")) {
             hint.setText("select package to edit");
+            ((Admin) getActivity()).setActionBarTitle("Packages");
+            ((Admin) getActivity()).setMenuItem(3);
 
         } else {
             if (activityName.equals("User")) {
                 hint.setText("select package to see details and join");
+                ((User) getActivity()).setActionBarTitle("Packages");
+                ((User) getActivity()).setMenuItem(1);
                 fab.setVisibility(View.GONE);
             }
         }

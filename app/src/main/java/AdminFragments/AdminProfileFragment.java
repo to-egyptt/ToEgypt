@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.google.gp_11.Admin;
 import io.google.gp_11.R;
+import io.google.gp_11.User;
 
 
 public class AdminProfileFragment extends Fragment {
 
+    private String activityName;
 
     public AdminProfileFragment() {
         // Required empty public constructor
@@ -29,7 +32,18 @@ public class AdminProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        activityName = getActivity().getClass().getSimpleName();
+        if (activityName.equals("Admin")) {
+            ((Admin) getActivity()).setActionBarTitle("Profile");
+            ((Admin) getActivity()).setMenuItem(5);
+        } else if (activityName.equals("User")) {
+            ((User) getActivity()).setActionBarTitle("Profile");
+            ((User) getActivity()).setMenuItem(4);
+        }
+
+        return view;
+
 
     }
 

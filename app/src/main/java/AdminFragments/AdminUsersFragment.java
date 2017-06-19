@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.google.gp_11.Admin;
 import io.google.gp_11.AdminUpdateUser;
 import io.google.gp_11.R;
 import models.ResultUserSet;
@@ -56,6 +57,8 @@ public class AdminUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_users_admin, container, false);
+        ((Admin) getActivity()).setActionBarTitle("Users");
+        ((Admin) getActivity()).setMenuItem(1);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewUsers);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //updateUI();
