@@ -1,4 +1,4 @@
-package AdminFragments;
+package Fragments;
 
 
 import android.content.Context;
@@ -19,17 +19,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import AdminModels.model_place;
-import io.google.gp_11.Admin;
-import io.google.gp_11.AdminUpdatePlace;
-import io.google.gp_11.R;
-import io.google.gp_11.User;
+import io.google.ToEgypt.Admin;
+import io.google.ToEgypt.Guide;
+import io.google.ToEgypt.R;
+import io.google.ToEgypt.UpdatePlace;
+import io.google.ToEgypt.User;
+import models.model_place_old_abuelhassan;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AdminPlacesFragment extends Fragment {
+public class Places extends Fragment {
 
     private Integer[] IMAGE = {R.drawable.pyramids, R.drawable.tower, R.drawable.egyptianmuseum, R.drawable.sinai};
     private String[] placeName = {"Pyramids", "Cairo Tower", "Egyptian Museum", "Mount Sinai"};
@@ -41,20 +42,17 @@ public class AdminPlacesFragment extends Fragment {
             "Mount Sinai is a mountain in the Sinai Peninsula of Egypt that is a possible location of the biblical Mount Sinai, According to Jewish, Christian, and Islamic tradition, the biblical Mount Sinai was the place where Moses received the Ten Commandments."
     };
 
-    private ArrayList<model_place> placeModels;
+    private ArrayList<model_place_old_abuelhassan> placeModels;
     private RecyclerView recyclerView;
     private fragment_place_adapter placeAdapter;
 
     private String activityName;
-
     /*
-                modes
-                1 update place      admin
-                2 create place      admin
-                */
-
-
-    public AdminPlacesFragment() {
+      modes to updatePlace
+        1 update place  admin
+        2 create place  admin
+   */
+    public Places() {
         // Required empty public constructor
     }
 
@@ -62,18 +60,16 @@ public class AdminPlacesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         placeModels = new ArrayList<>();
         for (int i = 0; i < placeName.length; i++) {
-            model_place PlaceModelForRecyclerView = new model_place(IMAGE[i], placeName[i], placeDescription[i], govenate[i], category[i]);
+            model_place_old_abuelhassan PlaceModelForRecyclerView = new model_place_old_abuelhassan(IMAGE[i], placeName[i], placeDescription[i], govenate[i], category[i]);
             placeModels.add(PlaceModelForRecyclerView);
         }
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_places_admin, container, false);
+        View view = inflater.inflate(R.layout.places, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         TextView hint = (TextView) view.findViewById(R.id.placeHint);
         activityName = getActivity().getClass().getSimpleName();
@@ -81,26 +77,29 @@ public class AdminPlacesFragment extends Fragment {
             hint.setText("select place to edit");
             ((Admin) getActivity()).setActionBarTitle("Places");
             ((Admin) getActivity()).setMenuItem(4);
+            fab.setImageResource(R.drawable.addplace);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Click action
+                    Intent intent = new Intent(getActivity(), UpdatePlace.class);
+                    intent.putExtra("Mode", 2);
+                    startActivity(intent);
+                }
+            });
 
-        } else {
-            if (activityName.equals("User")) {
-                hint.setText("select place to show all packages that belongs to this place");
-                ((User) getActivity()).setActionBarTitle("Places");
-                ((User) getActivity()).setMenuItem(0);
-                fab.setVisibility(View.GONE);
-            }
+        } else if (activityName.equals("User")) {
+            hint.setText("select place to show all packages that belongs to this place");
+            ((User) getActivity()).setActionBarTitle("Places");
+            ((User) getActivity()).setMenuItem(0);
+            fab.setVisibility(View.GONE);
+        } else if (activityName.equals("Guide")) {
+            hint.setText("select place to show all packages that belongs to this place");
+            ((Guide) getActivity()).setActionBarTitle("Places");
+            ((Guide) getActivity()).setMenuItem(0);
+            fab.setVisibility(View.GONE);
         }
 
-        fab.setImageResource(R.drawable.addplace);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                Intent intent = new Intent(getActivity(), AdminUpdatePlace.class);
-                intent.putExtra("Mode", 2);
-                startActivity(intent);
-            }
-        });
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPlaces);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
@@ -115,26 +114,26 @@ public class AdminPlacesFragment extends Fragment {
     private class PlacesHolder extends RecyclerView.ViewHolder {
         ImageView placeImage;
         TextView placeName;
-        TextView placeDescritpion;
-        TextView Governate;
-        TextView Category;
-        LinearLayout ln;
+        TextView placeDescription;
+        TextView placeGovernorate;
+        TextView placeCategory;
+        LinearLayout placeCard;
 
         public PlacesHolder(View view) {
             super(view);
             placeImage = (ImageView) view.findViewById(R.id.placeImage);
             placeName = (TextView) view.findViewById(R.id.placeName);
-            placeDescritpion = (TextView) view.findViewById(R.id.placeDescription);
-            Governate = (TextView) view.findViewById(R.id.placeGovernate);
-            Category = (TextView) view.findViewById(R.id.placeCategory);
-            ln = (LinearLayout) view.findViewById(R.id.linearLayoutPlace);
+            placeDescription = (TextView) view.findViewById(R.id.placeDescription);
+            placeGovernorate = (TextView) view.findViewById(R.id.placeGovernate);
+            placeCategory = (TextView) view.findViewById(R.id.placeCategory);
+            placeCard = (LinearLayout) view.findViewById(R.id.linearLayoutPlace);
         }
     }
 
     private class fragment_place_adapter extends RecyclerView.Adapter<PlacesHolder> {
-        private ArrayList<model_place> models;
+        private ArrayList<model_place_old_abuelhassan> models;
 
-        public fragment_place_adapter(ArrayList<model_place> Models) {
+        public fragment_place_adapter(ArrayList<model_place_old_abuelhassan> Models) {
             models = Models;
         }
 
@@ -147,39 +146,39 @@ public class AdminPlacesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PlacesHolder holder, int position) {
-            final model_place modela = models.get(position);
+            final model_place_old_abuelhassan modela = models.get(position);
             holder.placeImage.setImageResource(modela.getImage());
             holder.placeName.setText(modela.getPlaceName());
-            holder.placeDescritpion.setText(modela.getPlaceDescription());
-            holder.Governate.setText(modela.getPlaceGovernate());
-            holder.Category.setText(modela.getPlaceCategory());
-            holder.ln.setOnClickListener(new View.OnClickListener() {
+            holder.placeDescription.setText(modela.getPlaceDescription());
+            holder.placeGovernorate.setText(modela.getPlaceGovernate());
+            holder.placeCategory.setText(modela.getPlaceCategory());
+            holder.placeCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (activityName.equals("Admin")) {
-
-                        Intent intent = new Intent(getActivity(), AdminUpdatePlace.class);
+                        Intent intent = new Intent(getActivity(), UpdatePlace.class);
                         intent.putExtra("Mode", 1);
                         startActivity(intent);
-                    } else {
-                        if (activityName.equals("User")) {
-
-                            Fragment fragment = new AdminPackagesFragment();
-
+                    } else if (activityName.equals("User")) {
+                        Fragment fragment = new Packages();
                             Bundle bundle = new Bundle();
                             bundle.putInt("placeId", 1);
                             fragment.setArguments(bundle);
-
                             FragmentManager fragmentManager = getFragmentManager();
-
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
                             fragmentTransaction.replace(R.id.userContent, fragment);
-
                             fragmentTransaction.addToBackStack(null);
-
                             fragmentTransaction.commit();
-                        }
+                    } else if (activityName.equals("Guide")) {
+                        Fragment fragment = new Packages();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("placeId", 1);
+                        fragment.setArguments(bundle);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.guideContent, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
                     }
                 }
             });

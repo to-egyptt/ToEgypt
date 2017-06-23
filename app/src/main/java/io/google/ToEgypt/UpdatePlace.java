@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AdminUpdatePlace extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class UpdatePlace extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private int mode;
     private Uri mImageCaptureUri;
@@ -39,7 +39,7 @@ public class AdminUpdatePlace extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_update_place);
+        setContentView(R.layout.update_place);
 
 
         EditText place_name = (EditText) findViewById(R.id.place_Name);
@@ -88,13 +88,13 @@ public class AdminUpdatePlace extends AppCompatActivity implements AdapterView.O
             Update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(AdminUpdatePlace.this, "Place updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePlace.this, "Place updated", Toast.LENGTH_SHORT).show();
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdatePlace.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdatePlace.this);
                     alertDialog.setTitle("Confirm Delete ..");
                     alertDialog.setMessage("Are you sure you want delete this Place?");
                     alertDialog.setIcon(R.drawable.delete);
@@ -102,7 +102,7 @@ public class AdminUpdatePlace extends AppCompatActivity implements AdapterView.O
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Write your code here to execute after dialog
-                                    Toast.makeText(AdminUpdatePlace.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UpdatePlace.this, "You clicked on YES", Toast.LENGTH_SHORT).show();
                                 }
                             });
                     alertDialog.setNegativeButton("NO",
@@ -128,7 +128,7 @@ public class AdminUpdatePlace extends AppCompatActivity implements AdapterView.O
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(AdminUpdatePlace.this, "Place created", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdatePlace.this, "Place created", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

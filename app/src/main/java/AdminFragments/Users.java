@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import io.google.gp_11.Admin;
-import io.google.gp_11.AdminUpdateUser;
-import io.google.gp_11.R;
+import io.google.ToEgypt.Admin;
+import io.google.ToEgypt.R;
+import io.google.ToEgypt.UpdateUser;
 import models.ResultUserSet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -28,14 +28,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AdminUsersFragment extends Fragment {
+public class Users extends Fragment {
 
     private ArrayList<user> users;
     private RecyclerView recyclerView;
     private fragment_user_adapter UserAdapter;
     private Retrofit retrofit;
     private ProgressDialog progressDialog;
-    public AdminUsersFragment() {
+
+    public Users() {
         // Required empty public constructor
     }
 
@@ -57,7 +58,7 @@ public class AdminUsersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_users_admin, container, false);
+        View view = inflater.inflate(R.layout.users, container, false);
         ((Admin) getActivity()).setActionBarTitle("Users");
         ((Admin) getActivity()).setMenuItem(1);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewUsers);
@@ -139,7 +140,7 @@ public class AdminUsersFragment extends Fragment {
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
+                    Intent intent = new Intent(getActivity(), UpdateUser.class);
                     Bundle bundle = new Bundle();
                     //bundle.putSerializable("user",(Serializable) models.get(position));
                     bundle.putInt("id", models.get(position).getId());

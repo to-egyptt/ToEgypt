@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -33,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AdminUpdateUser extends AppCompatActivity {
+public class UpdateUser extends AppCompatActivity {
 
     private Uri mImageCaptureUri;
     ImageView banar1;
@@ -56,7 +56,7 @@ public class AdminUpdateUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_update_user);
+        setContentView(R.layout.update_user);
         email = (TextView) findViewById(R.id.Email_profile);
         username = (TextView) findViewById(R.id.username_profile);
         fullname = (EditText) findViewById(R.id.userFullName);
@@ -98,7 +98,7 @@ public class AdminUpdateUser extends AppCompatActivity {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdateUser.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdateUser.this);
                     alertDialog.setTitle("Confirm Delete ..");
                     alertDialog.setMessage("Are you sure you want delete this user?");
                     alertDialog.setIcon(R.drawable.delete);
@@ -112,17 +112,17 @@ public class AdminUpdateUser extends AppCompatActivity {
                                         toEgyptAPI.deleteUser(user_id).enqueue(new Callback<Void>() {
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response) {
-                                                Toast.makeText(AdminUpdateUser.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(UpdateUser.this, "Deleted", Toast.LENGTH_SHORT).show();
 
 
-                                                Intent i_to_admin = new Intent(AdminUpdateUser.this, Admin.class);
+                                                Intent i_to_admin = new Intent(UpdateUser.this, Admin.class);
                                                 startActivity(i_to_admin);
                                                 finish();
                                             }
 
                                             @Override
                                             public void onFailure(Call<Void> call, Throwable t) {
-                                                Toast.makeText(AdminUpdateUser.this, "Not Deleted some thing error", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(UpdateUser.this, "Not Deleted some thing error", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     } catch (Exception ex) {
@@ -148,7 +148,7 @@ public class AdminUpdateUser extends AppCompatActivity {
             reset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdateUser.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdateUser.this);
                     alertDialog.setTitle("Confirm Reset ..");
                     alertDialog.setMessage("Are you sure you want reset password for this user?");
                     alertDialog.setIcon(R.drawable.reset);
@@ -261,7 +261,7 @@ public class AdminUpdateUser extends AppCompatActivity {
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(AdminUpdateUser.this, "Place created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateUser.this, "Place created", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -362,12 +362,12 @@ public class AdminUpdateUser extends AppCompatActivity {
             public void onResponse(Call<user> call, Response<user> response) {
                 user = response.body();
                 resetpassword(userId, user);
-                Toast.makeText(AdminUpdateUser.this, "All is Good", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateUser.this, "All is Good", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<user> call, Throwable t) {
-                Toast.makeText(AdminUpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
             }
         });
@@ -380,13 +380,13 @@ public class AdminUpdateUser extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccess()) {
-                    Toast.makeText(AdminUpdateUser.this, "Password Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateUser.this, "Password Updated", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AdminUpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateUser.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
 
             }

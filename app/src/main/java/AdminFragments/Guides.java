@@ -19,9 +19,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import io.google.gp_11.Admin;
-import io.google.gp_11.AdminUpdateUser;
-import io.google.gp_11.R;
+import Fragments.Profile;
+import io.google.ToEgypt.Admin;
+import io.google.ToEgypt.R;
+import io.google.ToEgypt.UpdateUser;
 import models.ResultUserSet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -31,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AdminGuidesFragmemnt extends Fragment {
+public class Guides extends Fragment {
     private Retrofit retrofit;
     private static ArrayList<user> users;
     private ProgressDialog progressDialog;
@@ -39,7 +40,7 @@ public class AdminGuidesFragmemnt extends Fragment {
     private fragment_guide_adapter GuideAdapter;
 
 
-    public AdminGuidesFragmemnt() {
+    public Guides() {
         // Required empty public constructor
     }
 
@@ -78,7 +79,7 @@ public class AdminGuidesFragmemnt extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_guides_admin, container, false);
+        View view = inflater.inflate(R.layout.guides, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         ((Admin) getActivity()).setActionBarTitle("Guides");
         ((Admin) getActivity()).setMenuItem(2);
@@ -87,10 +88,10 @@ public class AdminGuidesFragmemnt extends Fragment {
             @Override
             public void onClick(View view) {
 //                Click action
-//                Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
+//                Intent intent = new Intent(getActivity(), UpdateUser.class);
 //                intent.putExtra("Mode", 3);
 //                startActivity(intent);
-                Fragment fragment = new AdminProfileFragment();
+                Fragment fragment = new Profile();
                 Bundle bundle = new Bundle();
                 bundle.putInt("mode", 1);
                 fragment.setArguments(bundle);
@@ -153,7 +154,7 @@ public class AdminGuidesFragmemnt extends Fragment {
             holder.ln.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AdminUpdateUser.class);
+                    Intent intent = new Intent(getActivity(), UpdateUser.class);
                     intent.putExtra("Mode", 1);
                     Bundle bundle = new Bundle();
                     //bundle.putSerializable("user",(Serializable) models.get(position));

@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 
 import android.app.ProgressDialog;
@@ -26,7 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private EditText username;
     private EditText userpass;
     private Retrofit retrofit;
@@ -40,16 +40,20 @@ public class MainActivity extends AppCompatActivity {
         session = new Session(this);
         if (session.loggedIn()) {
             if (session.getUserType() == 1) {
-                Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
+                Intent i_to_admin = new Intent(Login.this, Admin.class);
                 startActivity(i_to_admin);
                 finish();
             } else if (session.getUserType() == 2) {
-                Intent i_to_user = new Intent(MainActivity.this, User.class);
+                Intent i_to_user = new Intent(Login.this, User.class);
                 startActivity(i_to_user);
+                finish();
+            } else if (session.getUserType() == 3) {
+                Intent i_to_guide = new Intent(Login.this, Guide.class);
+                startActivity(i_to_guide);
                 finish();
             }
         }
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("logging in ");
         progressDialog.setCancelable(false);
@@ -71,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
                     sign_in.setText("Please wait ...");
                     if (inputname.isEmpty() || inputPass.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Please Fill the username or password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Please Fill the username or password", Toast.LENGTH_SHORT).show();
                         sign_in.setText("sign in");
                     } else {
                         login(inputname, inputPass);
                     }
                 } else
-                    Toast.makeText(MainActivity.this, "Please Check wifi or mobile connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Please Check wifi or mobile connection", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent register = new Intent(MainActivity.this, RegisterActivity.class);
+                Intent register = new Intent(Login.this, Registration.class);
                 startActivity(register);
             }
         });
@@ -98,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-
 
 
     public void login(String username, String Password) {
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<user> users;
                         users = (ArrayList<user>) response.body().getUsers();
                         if (users.size() == 0) {
-                            Toast.makeText(MainActivity.this, "password or username is incorrect", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "password or username is incorrect", Toast.LENGTH_SHORT).show();
                             sign_in.setText("sign in");
                         } else {
                             if (users.size() == 1) {
@@ -124,18 +127,23 @@ public class MainActivity extends AppCompatActivity {
                                 user1 = users.get(0);
                                 if (user1.getTypeId() == 1) {
                                     session.setEditor(user1.getId(), user1.getTypeId(), true);
-                                    Intent i_to_admin = new Intent(MainActivity.this, Admin.class);
+                                    Intent i_to_admin = new Intent(Login.this, Admin.class);
                                     startActivity(i_to_admin);
                                     finish();
 
                                 } else if (user1.getTypeId() == 2) {
                                     session.setEditor(user1.getId(), user1.getTypeId(), true);
-                                    Intent i_to_user = new Intent(MainActivity.this, User.class);
+                                    Intent i_to_user = new Intent(Login.this, User.class);
                                     startActivity(i_to_user);
                                     finish();
 
+                                } else if (user1.getTypeId() == 3) {
+                                    session.setEditor(user1.getId(), user1.getTypeId(), true);
+                                    Intent i_to_guide = new Intent(Login.this, Guide.class);
+                                    startActivity(i_to_guide);
+                                    finish();
                                 } else {
-                                    Toast.makeText(MainActivity.this, "some thing error", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "some thing error", Toast.LENGTH_SHORT).show();
                                     sign_in.setText("sign in");
                                 }
 
@@ -144,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        Toast.makeText(MainActivity.this, "Time out Expired .Please Check connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Time out Expired .Please Check connection", Toast.LENGTH_SHORT).show();
                         sign_in.setText("sign in");
 
                     }
@@ -157,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ResultUserSet> call, Throwable t) {
                     Button sign_in = (Button) findViewById(R.id.sing_in);
-                    Toast.makeText(MainActivity.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                     sign_in.setText("sign in");
                     //progressDialog.dismiss();
                 }

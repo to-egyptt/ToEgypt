@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -34,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class AdminUpdatePackage extends AppCompatActivity
+public class UpdatePackage extends AppCompatActivity
         //implements View.OnClickListener
 {
     private ArrayList<place> places;
@@ -56,11 +56,17 @@ public class AdminUpdatePackage extends AppCompatActivity
     private DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
 
+    /*
+    modes to updatePackage
+    1 update package admin
+    2 create package admin
+    3 package details user , guide
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_update_package);
+        setContentView(R.layout.update_package);
         retrofit = Singleton.getRetrofit();
         package_name = (EditText) findViewById(R.id.packageName);
         Places = (EditText) findViewById(R.id.packagePlaces);
@@ -82,9 +88,7 @@ public class AdminUpdatePackage extends AppCompatActivity
         setDateTimeField();
         Intent i = getIntent();
         mode = i.getExtras().getInt("Mode");
-
         if (mode == 1) {
-
             Places.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +102,7 @@ public class AdminUpdatePackage extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<ResultPlaceSet> call, Throwable t) {
-                            Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                             //progressDialog.dismiss();
                         }
                     });
@@ -111,13 +115,13 @@ public class AdminUpdatePackage extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(AdminUpdatePackage.this, "Package updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePackage.this, "Package updated", Toast.LENGTH_SHORT).show();
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdatePackage.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdatePackage.this);
                     alertDialog.setTitle("Confirm Delete ..");
                     alertDialog.setMessage("Are you sure you want delete this Package?");
                     alertDialog.setIcon(R.drawable.delete);
@@ -129,8 +133,8 @@ public class AdminUpdatePackage extends AppCompatActivity
                                         @Override
                                         public void onResponse(Call<Void> call, Response<Void> response) {
                                             if (response.isSuccess()) {
-                                                Toast.makeText(AdminUpdatePackage.this, "Deleted sucssfully", Toast.LENGTH_SHORT).show();
-                                                Intent i_to_admin = new Intent(AdminUpdatePackage.this, Admin.class);
+                                                Toast.makeText(UpdatePackage.this, "Deleted sucssfully", Toast.LENGTH_SHORT).show();
+                                                Intent i_to_admin = new Intent(UpdatePackage.this, Admin.class);
                                                 startActivity(i_to_admin);
                                                 finish();
                                             }
@@ -167,7 +171,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(AdminUpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (mode == 3) { // pckg details
@@ -181,7 +185,7 @@ public class AdminUpdatePackage extends AppCompatActivity
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AdminUpdatePackage.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(UpdatePackage.this);
                     alertDialog.setTitle("Confirm Join ..");
                     alertDialog.setMessage("Are you sure you want Join to this Package?");
                     alertDialog.setIcon(R.drawable.success);
@@ -190,7 +194,7 @@ public class AdminUpdatePackage extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Write your code here to execute after dialog
 
-                                    Intent i_to_admin = new Intent(AdminUpdatePackage.this, Admin.class); // navigate to my package
+                                    Intent i_to_admin = new Intent(UpdatePackage.this, Admin.class); // navigate to my package
                                     startActivity(i_to_admin);
                                     finish();
 
@@ -261,14 +265,14 @@ public class AdminUpdatePackage extends AppCompatActivity
             public void onResponse(Call<ResultUserSet> call, Response<ResultUserSet> response) {
                 if (response.isSuccess()) {
                     guides = (ArrayList<user>) response.body().getUsers();
-                    ArrayAdapter<user> userArrayAdapter = new ArrayAdapter<user>(AdminUpdatePackage.this, R.layout.support_simple_spinner_dropdown_item, guides);
+                    ArrayAdapter<user> userArrayAdapter = new ArrayAdapter<user>(UpdatePackage.this, R.layout.support_simple_spinner_dropdown_item, guides);
                     guide.setAdapter(userArrayAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<ResultUserSet> call, Throwable t) {
-                Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
             }
         });
@@ -295,7 +299,7 @@ public class AdminUpdatePackage extends AppCompatActivity
 
             @Override
             public void onFailure(Call<packag> call, Throwable t) {
-                Toast.makeText(AdminUpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
             }
         });

@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import AdminFragments.AdminGuidesFragmemnt;
-import AdminFragments.AdminHomeFragment;
-import AdminFragments.AdminPackagesFragment;
-import AdminFragments.AdminPlacesFragment;
-import AdminFragments.AdminProfileFragment;
-import AdminFragments.AdminUsersFragment;
+import AdminFragments.Guides;
+import AdminFragments.Home;
+import AdminFragments.Users;
 import BL.Session;
+import Fragments.Packages;
+import Fragments.Places;
+import Fragments.Profile;
 
 public class Admin extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -32,7 +32,7 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         session = new Session(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.admin);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
         mToolbar.setTitle("Home");
         setSupportActionBar(mToolbar);
@@ -91,37 +91,37 @@ public class Admin extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         Fragment fragment = null;
-                        Class fragmentClass = AdminHomeFragment.class;
+                        Class fragmentClass = Home.class;
                         switch (menuItem.getItemId()) {
                             case R.id.nav_home:
-                                fragmentClass = AdminHomeFragment.class;
+                                fragmentClass = Home.class;
                                 break;
                             case R.id.nav_users:
-                                fragmentClass = AdminUsersFragment.class;
+                                fragmentClass = Users.class;
                                 break;
                             case R.id.nav_guides:
-                                fragmentClass = AdminGuidesFragmemnt.class;
+                                fragmentClass = Guides.class;
                                 break;
                             case R.id.nav_packages:
-                                fragmentClass = AdminPackagesFragment.class;
+                                fragmentClass = Packages.class;
                                 break;
                             case R.id.nav_places:
-                                fragmentClass = AdminPlacesFragment.class;
+                                fragmentClass = Places.class;
                                 break;
                             case R.id.nav_profile:
-                                fragmentClass = AdminProfileFragment.class;
+                                fragmentClass = Profile.class;
 
 
-//                                Intent intent = new Intent(Admin.this, AdminUpdateUser.class);
+//                                Intent intent = new Intent(Admin.this, UpdateUser.class);
 //                                intent.putExtra("Mode", 2);
 //                                startActivity(intent);
                                 break;
                             case R.id.nav_logout:
                                 session.setLoggedIn(false);
                                 finish();
-                                startActivity(new Intent(Admin.this, MainActivity.class));
+                                startActivity(new Intent(Admin.this, Login.class));
                             default:
-                                fragmentClass = AdminHomeFragment.class;
+                                fragmentClass = Home.class;
                         }
 
                         try {

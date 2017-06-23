@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.google.gp_11">
+    package="io.google.ToEgypt">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,20 +11,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="io.google.ToEgypt.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Admin" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".AdminUpdateUser" />
-        <activity android:name=".AdminUpdatePlace" />
-        <activity android:name=".AdminUpdatePackage" />
-        <activity android:name=".User"></activity>
-        <activity android:name=".Guide"></activity>
+        <activity android:name="io.google.ToEgypt.Admin" />
+        <activity android:name="io.google.ToEgypt.Registration" />
+        <activity android:name="io.google.ToEgypt.UpdateUser" />
+        <activity android:name="io.google.ToEgypt.UpdatePlace" />
+        <activity android:name="io.google.ToEgypt.UpdatePackage" />
+        <activity android:name="io.google.ToEgypt.User" />
+        <activity android:name="io.google.ToEgypt.Guide" />
     </application>
 
 </manifest>

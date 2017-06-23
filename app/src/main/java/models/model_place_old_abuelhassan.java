@@ -1,17 +1,17 @@
-package AdminModels;
+package models;
 
 /**
  * Created by Abu-elhassan on 5/11/2017.
  */
 
-public class model_place {
+public class model_place_old_abuelhassan {
     Integer image;
     String placeName;
     String placeDescription;
     String placeGovernate;
     String placeCategory;
 
-    public model_place(Integer image, String placeName, String placeDescription, String placeGovernate, String placeCategory) {
+    public model_place_old_abuelhassan(Integer image, String placeName, String placeDescription, String placeGovernate, String placeCategory) {
 
         this.image = image;
         this.placeName = placeName;

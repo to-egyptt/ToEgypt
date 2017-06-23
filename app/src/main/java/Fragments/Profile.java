@@ -1,4 +1,4 @@
-package AdminFragments;
+package Fragments;
 
 
 import android.content.Context;
@@ -17,9 +17,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import BL.Session;
-import io.google.gp_11.Admin;
-import io.google.gp_11.R;
-import io.google.gp_11.User;
+import io.google.ToEgypt.Admin;
+import io.google.ToEgypt.Guide;
+import io.google.ToEgypt.R;
+import io.google.ToEgypt.User;
 import models.ResultCountrySet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -31,13 +32,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class AdminProfileFragment extends Fragment {
+public class Profile extends Fragment {
 
     Retrofit retrofit;
     private String activityName;
     private int mode;
-    private EditText Fullname;
-    private EditText Username;
+    private EditText fullName;
+    private EditText userName;
     private EditText Email;
     private EditText Age;
     private EditText Phone;
@@ -46,7 +47,8 @@ public class AdminProfileFragment extends Fragment {
     Session session;
     user user;
     int urser_id;
-    public AdminProfileFragment() {
+
+    public Profile() {
         // Required empty public constructor
     }
 
@@ -67,10 +69,10 @@ public class AdminProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        View view = inflater.inflate(R.layout.profile, container, false);
 
-        Fullname = (EditText) view.findViewById(R.id.userFullName);
-        Username = (EditText) view.findViewById(R.id.username);
+        fullName = (EditText) view.findViewById(R.id.userFullName);
+        userName = (EditText) view.findViewById(R.id.username);
         Email = (EditText) view.findViewById(R.id.userEmail);
         Age = (EditText) view.findViewById(R.id.userAge);
         Phone = (EditText) view.findViewById(R.id.userNumberPhone);
@@ -83,8 +85,8 @@ public class AdminProfileFragment extends Fragment {
             update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String fullname = Fullname.getText().toString();
-                    String username = Username.getText().toString();
+                    String fullname = Profile.this.fullName.getText().toString();
+                    String username = userName.getText().toString();
                     String email = Email.getText().toString();
                     int age = 0;
                     if (!(Age.getText().toString().isEmpty())) {
@@ -123,8 +125,8 @@ public class AdminProfileFragment extends Fragment {
                 @Override
                 public void onResponse(Call<user> call, Response<user> response) {
                     user = response.body();
-                    Fullname.setText(user.getFullname());
-                    Username.setText(user.getUsername());
+                    fullName.setText(user.getFullname());
+                    userName.setText(user.getUsername());
                     Email.setText(user.getEmail());
                     Age.setText(String.valueOf(user.getAge()));
                     Phone.setText(String.valueOf(user.getPhonenumber()));
@@ -142,9 +144,13 @@ public class AdminProfileFragment extends Fragment {
         } else if (activityName.equals("User")) {
             ((User) getActivity()).setActionBarTitle("Profile");
             ((User) getActivity()).setMenuItem(4);
-
+            update.setText("Update");
+        } else if (activityName.equals("User")) {
+            ((Guide) getActivity()).setActionBarTitle("Profile");
+            ((Guide) getActivity()).setMenuItem(4);
             update.setText("Update");
         }
+
         return view;
     }
 

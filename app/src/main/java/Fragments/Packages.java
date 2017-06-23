@@ -1,4 +1,4 @@
-package AdminFragments;
+package Fragments;
 
 
 import android.app.ProgressDialog;
@@ -18,10 +18,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import io.google.gp_11.Admin;
-import io.google.gp_11.AdminUpdatePackage;
-import io.google.gp_11.R;
-import io.google.gp_11.User;
+import io.google.ToEgypt.Admin;
+import io.google.ToEgypt.Guide;
+import io.google.ToEgypt.R;
+import io.google.ToEgypt.UpdatePackage;
+import io.google.ToEgypt.User;
 import models.ResultpakageSet;
 import models.Singleton;
 import models.ToEgyptAPI;
@@ -35,7 +36,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AdminPackagesFragment extends Fragment {
+public class Packages extends Fragment {
 
     private ArrayList<packag> packages;
     private Retrofit retrofit;
@@ -44,11 +45,18 @@ public class AdminPackagesFragment extends Fragment {
     private String activityName;
     private int placeId;
     private ProgressDialog progressDialog;
-    public AdminPackagesFragment() {
+
+    public Packages() {
         // Required empty public constructor
     }
 
 
+    /*
+    modes to updatePackage
+    1 update package admin
+    2 create package admin
+    3 package details user , guide
+    */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         progressDialog = new ProgressDialog(this.getContext());
@@ -60,7 +68,6 @@ public class AdminPackagesFragment extends Fragment {
             placeId = bundle.getInt("placeId");
 
         }
-
         retrofit = Singleton.getRetrofit();
         ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
         api.getPackages().enqueue(new Callback<ResultpakageSet>() {
@@ -78,16 +85,14 @@ public class AdminPackagesFragment extends Fragment {
             }
         });
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_packages_admin, container, false);
+        View view = inflater.inflate(R.layout.packages, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
         TextView hint = (TextView) view.findViewById(R.id.packageHint);
         activityName = getActivity().getClass().getSimpleName();
         if (activityName.equals("Admin")) {
@@ -98,29 +103,32 @@ public class AdminPackagesFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Click action
-                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
+                    Intent intent = new Intent(getActivity(), UpdatePackage.class);
                     intent.putExtra("Mode", 2);
                     startActivity(intent);
 
                 }
             });
-
-        } else {
-            if (activityName.equals("User")) {
-                hint.setText("select package to see details and join");
-                ((User) getActivity()).setActionBarTitle("Packages");
-                ((User) getActivity()).setMenuItem(1);
-                if (placeId == 1) {
-                    Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
-                }
-                fab.setVisibility(View.GONE);
+        } else if (activityName.equals("User")) {
+            hint.setText("select package to see details and join");
+            ((User) getActivity()).setActionBarTitle("Packages");
+            ((User) getActivity()).setMenuItem(1);
+            if (placeId == 1) {
+                Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
             }
+            fab.setVisibility(View.GONE);
+        } else if (activityName.equals("Guide")) {
+            hint.setText("select package to see details");
+            ((Guide) getActivity()).setActionBarTitle("Packages");
+            ((Guide) getActivity()).setMenuItem(1);
+            if (placeId == 1) {
+                Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
+            }
+            fab.setVisibility(View.GONE);
         }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPackages);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//         updateUI();
         return view;
     }
 
@@ -130,23 +138,23 @@ public class AdminPackagesFragment extends Fragment {
     }
 
     private class PackagesHolder extends RecyclerView.ViewHolder {
-        TextView end;
-        TextView start;
-        TextView pckname;
-        TextView placesingpckg;
-        TextView time;
-        TextView price;
-        LinearLayout ln;
+        TextView packageEnd;
+        TextView packageStart;
+        TextView packageName;
+        TextView placesInPackages;
+        TextView packageTime;
+        TextView packagePrice;
+        LinearLayout packageCard;
 
         public PackagesHolder(View view) {
             super(view);
-            start = (TextView) view.findViewById(R.id.start);
-            end = (TextView) view.findViewById(R.id.end);
-            pckname = (TextView) view.findViewById(R.id.pckgname);
-            placesingpckg = (TextView) view.findViewById(R.id.placesinpckg);
-            time = (TextView) view.findViewById(R.id.timetostart);
-            price = (TextView) view.findViewById(R.id.price);
-            ln = (LinearLayout) view.findViewById(R.id.linearLayoutPackage);
+            packageStart = (TextView) view.findViewById(R.id.start);
+            packageEnd = (TextView) view.findViewById(R.id.end);
+            packageName = (TextView) view.findViewById(R.id.pckgname);
+            placesInPackages = (TextView) view.findViewById(R.id.placesinpckg);
+            packageTime = (TextView) view.findViewById(R.id.timetostart);
+            packagePrice = (TextView) view.findViewById(R.id.price);
+            packageCard = (LinearLayout) view.findViewById(R.id.linearLayoutPackage);
 
         }
     }
@@ -170,27 +178,28 @@ public class AdminPackagesFragment extends Fragment {
             String places = "";
             double price = 0;
             final packag modela = models.get(position);
-            holder.pckname.setText(modela.getName());
+            holder.packageName.setText(modela.getName());
             for (int i = 0; i < modela.getPackageDetailes().size(); i++) {
                 places = places + modela.getPackageDetailes().get(i).getPlace().getName() + ",";
             }
-            holder.placesingpckg.setText(places);
-            holder.start.setText(String.valueOf(modela.getStart_date()).replace(String.valueOf(modela.getStart_date()).substring(10, 30), " "));
-            holder.end.setText(String.valueOf(modela.getEnd_date()).replace(String.valueOf(modela.getEnd_date()).substring(10, 30), " "));
-            holder.time.setText(modela.getUser().getUsername());
+            holder.placesInPackages.setText(places);
+            holder.packageStart.setText(String.valueOf(modela.getStart_date()).replace(String.valueOf(modela.getStart_date()).substring(10, 30), " "));
+            holder.packageEnd.setText(String.valueOf(modela.getEnd_date()).replace(String.valueOf(modela.getEnd_date()).substring(10, 30), " "));
+            holder.packageTime.setText(modela.getUser().getUsername());
             for (int i = 0; i < modela.getPackageDetailes().size(); i++) {
                 price += modela.getPackageDetailes().get(i).getPlace().getPriceTovisit();
             }
-            holder.price.setText(String.valueOf(price) + " USD");
-            holder.ln.setOnClickListener(new View.OnClickListener() {
+            holder.packagePrice.setText(String.valueOf(price) + " USD");
+            holder.packageCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     activityName = getActivity().getClass().getSimpleName();
-                    Intent intent = new Intent(getActivity(), AdminUpdatePackage.class);
-
+                    Intent intent = new Intent(getActivity(), UpdatePackage.class);
                     if (activityName.equals("Admin")) {
                         intent.putExtra("Mode", 1);
                     } else if (activityName.equals("User")) {
+                        intent.putExtra("Mode", 3);
+                    } else if (activityName.equals("Guide")) {
                         intent.putExtra("Mode", 3);
                     }
                     intent.putExtra("package_id", modela.getId());

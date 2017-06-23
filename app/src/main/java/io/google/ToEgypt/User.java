@@ -1,4 +1,4 @@
-package io.google.gp_11;
+package io.google.ToEgypt;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import AdminFragments.AdminPackagesFragment;
-import AdminFragments.AdminPlacesFragment;
-import AdminFragments.AdminProfileFragment;
 import BL.Session;
+import Fragments.Packages;
+import Fragments.Places;
+import Fragments.Profile;
 
 public class User extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class User extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         session = new Session(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.user);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
         mToolbar.setTitle("Places");
         setSupportActionBar(mToolbar);
@@ -66,21 +66,21 @@ public class User extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         Fragment fragment = null;
-                        Class fragmentClass = AdminPlacesFragment.class;
+                        Class fragmentClass = Places.class;
                         switch (menuItem.getItemId()) {
                             case R.id.nav_packages:
-                                fragmentClass = AdminPackagesFragment.class;
+                                fragmentClass = Packages.class;
                                 break;
                             case R.id.nav_places:
-                                fragmentClass = AdminPlacesFragment.class;
+                                fragmentClass = Places.class;
                                 break;
                             case R.id.nav_myPackages:
-                                fragmentClass = AdminPackagesFragment.class;
+                                fragmentClass = Packages.class;
                                 break;
 
                             case R.id.nav_profile:
-                                fragmentClass = AdminProfileFragment.class;
-//                                Intent intent = new Intent(User.this, AdminUpdateUser.class);
+                                fragmentClass = Profile.class;
+//                                Intent intent = new Intent(User.this, UpdateUser.class);
 //                                intent.putExtra("Mode", 2);
 //                                startActivity(intent);
 
@@ -88,13 +88,13 @@ public class User extends AppCompatActivity {
                             case R.id.nav_logout:
                                 session.setLoggedIn(false);
                                 finish();
-                                startActivity(new Intent(User.this, MainActivity.class));
+                                startActivity(new Intent(User.this, Login.class));
 
-//                                fragmentClass = AdminProfileFragment.class;
+//                                fragmentClass = Profile.class;
 //                                mToolbar.setTitle("My Packages");
 //                                break;
 //                            default:
-//                                fragmentClass = AdminHomeFragment.class;
+//                                fragmentClass = Home.class;
                         }
 
                         try {
