@@ -11,6 +11,24 @@ public class place {
     private int gvernate_id;
     private int category_id;
     private double priceTovisit;
+    private category category;
+    private governate governate;
+
+    public category getCategory() {
+        return category;
+    }
+
+    public void setCategory(category category) {
+        this.category = category;
+    }
+
+    public governate getGovernate() {
+        return governate;
+    }
+
+    public void setGovernate(governate governate) {
+        this.governate = governate;
+    }
 
     public int getId() {
         return id;
@@ -59,4 +77,6 @@ public class place {
     public void setPriceTovisit(double priceTovisit) {
         this.priceTovisit = priceTovisit;
     }
+
+
 }

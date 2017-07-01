@@ -66,7 +66,8 @@ public class Packages extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             placeId = bundle.getInt("placeId");
-
+        } else {
+            placeId = 0;
         }
         retrofit = Singleton.getRetrofit();
         ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
@@ -74,6 +75,16 @@ public class Packages extends Fragment {
             @Override
             public void onResponse(Call<ResultpakageSet> call, Response<ResultpakageSet> response) {
                 packages = response.body().getValue();
+                if (placeId != 0) {
+                    ArrayList<packag> list = new ArrayList<packag>();
+                    for (int i = 0; i < packages.size(); i++) {
+                        for (int j = 0; j < packages.get(i).getPackageDetailes().size(); j++) {
+                            if (packages.get(i).getPackageDetailes().get(j).getPlace_id() == placeId)
+                                list.add(packages.get(i));
+                        }
+                    }
+                    packages = list;
+                }
                 updateUI();
                 progressDialog.dismiss();
             }

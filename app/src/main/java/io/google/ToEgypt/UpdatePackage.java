@@ -16,24 +16,27 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
+import BL.Session;
 import models.ResultPlaceSet;
 import models.ResultUserSet;
 import models.Singleton;
 import models.ToEgyptAPI;
 import models.packag;
 import models.place;
+import models.reserved_package;
 import models.user;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-
 public class UpdatePackage extends AppCompatActivity
         //implements View.OnClickListener
 {
@@ -55,7 +58,7 @@ public class UpdatePackage extends AppCompatActivity
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
-
+    private Session session;
     /*
     modes to updatePackage
     1 update package admin
@@ -67,6 +70,7 @@ public class UpdatePackage extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_package);
+        session = new Session(this);
         retrofit = Singleton.getRetrofit();
         package_name = (EditText) findViewById(R.id.packageName);
         Places = (EditText) findViewById(R.id.packagePlaces);
@@ -77,8 +81,6 @@ public class UpdatePackage extends AppCompatActivity
         Button Update = (Button) findViewById(R.id.updatePackage);
         Button delete = (Button) findViewById(R.id.deletePackage);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
-
-        fromDateEtxt = (EditText) findViewById(R.id.etxt_fromdate);
         fromDateEtxt.setInputType(InputType.TYPE_NULL);
         fromDateEtxt.requestFocus();
         toDateEtxt = (EditText) findViewById(R.id.etxt_todate);
@@ -170,11 +172,28 @@ public class UpdatePackage extends AppCompatActivity
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+                    packag packag1 = new packag();
+                    packag1.setName(package_name.getText().toString());
+                    packag1.setGuide_id(((user) guide.getSelectedItem()).getId());
+                    packag1.setDescription(description.getText().toString());
+                    Date date;
+                    try {
+                        date = format.parse(fromDateEtxt.getText().toString());
+                        packag1.setStart_date(date);
+                        packag1.setEnd_date(format.parse(toDateEtxt.getText().toString()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    
+
 
                     Toast.makeText(UpdatePackage.this, "Package created", Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (mode == 3) { // pckg details
+            package_id = i.getExtras().getInt("package_id");
+            setForms(package_id);
             mToolbar.setTitle("Package Details");
             package_name.setCursorVisible(false);
             package_name.setFocusable(false);
@@ -194,9 +213,24 @@ public class UpdatePackage extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Write your code here to execute after dialog
 
-                                    Intent i_to_admin = new Intent(UpdatePackage.this, Admin.class); // navigate to my package
-                                    startActivity(i_to_admin);
-                                    finish();
+                                    reserved_package reservedPackage = new reserved_package();
+                                    reservedPackage.setPackage_id(package_id);
+                                    reservedPackage.setTourist_id(session.getUserId());
+                                    ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+                                    api.reserve(reservedPackage).enqueue(new Callback<reserved_package>() {
+                                        @Override
+                                        public void onResponse(Call<reserved_package> call, Response<reserved_package> response) {
+                                            Toast.makeText(UpdatePackage.this, "added to your package", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<reserved_package> call, Throwable t) {
+                                            Toast.makeText(UpdatePackage.this, "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                                            //progressDialog.dismiss();
+                                        }
+                                    });
+
 
                                 }
                             });

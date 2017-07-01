@@ -1,6 +1,7 @@
 package Fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,14 @@ import io.google.ToEgypt.Guide;
 import io.google.ToEgypt.R;
 import io.google.ToEgypt.UpdatePlace;
 import io.google.ToEgypt.User;
-import models.model_place_old_abuelhassan;
+import models.ResultPlaceSet;
+import models.Singleton;
+import models.ToEgyptAPI;
+import models.place;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 /**
@@ -32,20 +41,22 @@ import models.model_place_old_abuelhassan;
  */
 public class Places extends Fragment {
 
-    private Integer[] IMAGE = {R.drawable.pyramids, R.drawable.tower, R.drawable.egyptianmuseum, R.drawable.sinai};
-    private String[] placeName = {"Pyramids", "Cairo Tower", "Egyptian Museum", "Mount Sinai"};
-    private String[] govenate = {"Giza", "Cairo", "Cairo", "Sinai"};
-    private String[] category = {"historical", "historical", "historical", "historical"};
-    private String[] placeDescription = {"The Egyptian pyramids are ancient pyramid-shaped masonry structures located in Egypt. The Great Pyramid was listed as one of the Seven Wonders of the World.",
-            "The Cairo Tower is a free-standing concrete tower located in Cairo, Egypt. At 187 m (614 ft), it has been the tallest structure in Egypt and North Africa for about 50 years",
-            "The Museum of Egyptian Antiquities is home to an extensive collection of ancient Egyptian antiquities. It has 120,000 items, with a representative amount on display, the remainder in storerooms",
-            "Mount Sinai is a mountain in the Sinai Peninsula of Egypt that is a possible location of the biblical Mount Sinai, According to Jewish, Christian, and Islamic tradition, the biblical Mount Sinai was the place where Moses received the Ten Commandments."
-    };
+//    private Integer[] IMAGE = {R.drawable.pyramids, R.drawable.tower, R.drawable.egyptianmuseum, R.drawable.sinai};
+//    private String[] placeName = {"Pyramids", "Cairo Tower", "Egyptian Museum", "Mount Sinai"};
+//    private String[] govenate = {"Giza", "Cairo", "Cairo", "Sinai"};
+//    private String[] category = {"historical", "historical", "historical", "historical"};
+//    private String[] placeDescription = {"The Egyptian pyramids are ancient pyramid-shaped masonry structures located in Egypt. The Great Pyramid was listed as one of the Seven Wonders of the World.",
+//            "The Cairo Tower is a free-standing concrete tower located in Cairo, Egypt. At 187 m (614 ft), it has been the tallest structure in Egypt and North Africa for about 50 years",
+//            "The Museum of Egyptian Antiquities is home to an extensive collection of ancient Egyptian antiquities. It has 120,000 items, with a representative amount on display, the remainder in storerooms",
+//            "Mount Sinai is a mountain in the Sinai Peninsula of Egypt that is a possible location of the biblical Mount Sinai, According to Jewish, Christian, and Islamic tradition, the biblical Mount Sinai was the place where Moses received the Ten Commandments."
+//    };
 
-    private ArrayList<model_place_old_abuelhassan> placeModels;
+    //private ArrayList<model_place_old_abuelhassan> placeModels;
+    private ArrayList<place> places;
     private RecyclerView recyclerView;
     private fragment_place_adapter placeAdapter;
-
+    private ProgressDialog progressDialog;
+    private Retrofit retrofit;
     private String activityName;
     /*
       modes to updatePlace
@@ -58,11 +69,34 @@ public class Places extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        placeModels = new ArrayList<>();
-        for (int i = 0; i < placeName.length; i++) {
-            model_place_old_abuelhassan PlaceModelForRecyclerView = new model_place_old_abuelhassan(IMAGE[i], placeName[i], placeDescription[i], govenate[i], category[i]);
-            placeModels.add(PlaceModelForRecyclerView);
-        }
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Retrieving data. please wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        retrofit = Singleton.getRetrofit();
+        ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+        api.getPlaces().enqueue(new Callback<ResultPlaceSet>() {
+            @Override
+            public void onResponse(Call<ResultPlaceSet> call, Response<ResultPlaceSet> response) {
+                if (response.isSuccess()) {
+                    places = response.body().getValue();
+                    updateUI();
+                    progressDialog.dismiss();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResultPlaceSet> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+//        placeModels = new ArrayList<>();
+//        for (int i = 0; i < placeName.length; i++) {
+//            model_place_old_abuelhassan PlaceModelForRecyclerView = new model_place_old_abuelhassan(IMAGE[i], placeName[i], placeDescription[i], govenate[i], category[i]);
+//            placeModels.add(PlaceModelForRecyclerView);
+//        }
         super.onCreate(savedInstanceState);
     }
 
@@ -102,12 +136,12 @@ public class Places extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewPlaces);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
+        //updateUI();
         return view;
     }
 
     private void updateUI() {
-        placeAdapter = new fragment_place_adapter(placeModels);
+        placeAdapter = new fragment_place_adapter(places);
         recyclerView.setAdapter(placeAdapter);
     }
 
@@ -131,9 +165,9 @@ public class Places extends Fragment {
     }
 
     private class fragment_place_adapter extends RecyclerView.Adapter<PlacesHolder> {
-        private ArrayList<model_place_old_abuelhassan> models;
+        private ArrayList<place> models;
 
-        public fragment_place_adapter(ArrayList<model_place_old_abuelhassan> Models) {
+        public fragment_place_adapter(ArrayList<place> Models) {
             models = Models;
         }
 
@@ -146,23 +180,24 @@ public class Places extends Fragment {
 
         @Override
         public void onBindViewHolder(PlacesHolder holder, int position) {
-            final model_place_old_abuelhassan modela = models.get(position);
-            holder.placeImage.setImageResource(modela.getImage());
-            holder.placeName.setText(modela.getPlaceName());
-            holder.placeDescription.setText(modela.getPlaceDescription());
-            holder.placeGovernorate.setText(modela.getPlaceGovernate());
-            holder.placeCategory.setText(modela.getPlaceCategory());
+            final place modela = models.get(position);
+            holder.placeImage.setImageResource(R.drawable.sinai);
+            holder.placeName.setText(modela.getName());
+            holder.placeDescription.setText(modela.getDescription());
+            holder.placeGovernorate.setText(modela.getGovernate().getName());
+            holder.placeCategory.setText(modela.getCategory().getName());
             holder.placeCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (activityName.equals("Admin")) {
                         Intent intent = new Intent(getActivity(), UpdatePlace.class);
                         intent.putExtra("Mode", 1);
+                        intent.putExtra("place_id", modela.getId());
                         startActivity(intent);
                     } else if (activityName.equals("User")) {
                         Fragment fragment = new Packages();
                             Bundle bundle = new Bundle();
-                            bundle.putInt("placeId", 1);
+                        bundle.putInt("placeId", modela.getId());
                             fragment.setArguments(bundle);
                             FragmentManager fragmentManager = getFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

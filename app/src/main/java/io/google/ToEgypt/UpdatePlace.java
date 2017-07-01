@@ -26,68 +26,67 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.ResultcategorySet;
+import models.Singleton;
+import models.ToEgyptAPI;
+import models.category;
+import models.governate;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class UpdatePlace extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private int mode;
+    private int place_id;
     private Uri mImageCaptureUri;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int CROP_FROM_CAMERA = 2;
     private static final int PICK_FROM_FILE = 3;
     ImageView img;
+    private EditText place_name;
+    private Spinner category;
+    private Spinner governorate;
+    private EditText Description;
+    private Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_place);
-
-
-        EditText place_name = (EditText) findViewById(R.id.place_Name);
-        Spinner category = (Spinner) findViewById(R.id.place_category);
-        Spinner governorate = (Spinner) findViewById(R.id.place_Governate);
-        EditText Description = (EditText) findViewById(R.id.place_description);
+        retrofit = Singleton.getRetrofit();
+        place_name = (EditText) findViewById(R.id.place_Name);
+        category = (Spinner) findViewById(R.id.place_category);
+        governorate = (Spinner) findViewById(R.id.place_Governate);
+        Description = (EditText) findViewById(R.id.place_description);
         img = (ImageView) findViewById(R.id.placeimagetoview);
         Button Update = (Button) findViewById(R.id.updatePlace);
         Button delete = (Button) findViewById(R.id.deletePlace);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
-
-        category.setOnItemSelectedListener(this);
-        governorate.setOnItemSelectedListener(this);
-
-
-        List<String> categories = new ArrayList<String>();
-
-        categories.add("relgious");
-        categories.add("ancient");
-
-        List<String> governates = new ArrayList<String>();
-        governates.add("Cairo");
-        governates.add("Giza");
-        governates.add("sinai");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<String> Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, governates);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(dataAdapter);
-        governorate.setAdapter(Adapter);
-
+        fillGoverSpinner();
+        CategorySpinner();
 
         Intent i = getIntent();
         mode = i.getExtras().getInt("Mode");
+        place_id = i.getExtras().getInt("place_id");
 
         if (mode == 1) {
-            String myString = "ancient"; //the value you want the position for
-            ArrayAdapter myAdap = (ArrayAdapter) category.getAdapter(); //cast to an ArrayAdapter
-            int spinnerPosition = myAdap.getPosition(myString);
-            //set the default according to value
-            category.setSelection(spinnerPosition);
+//            String myString = "ancient"; //the value you want the position for
+//            ArrayAdapter myAdap = (ArrayAdapter) category.getAdapter(); //cast to an ArrayAdapter
+//            int spinnerPosition = myAdap.getPosition(myString);
+//            //set the default according to value
+//            category.setSelection(spinnerPosition);
             img = (ImageView) findViewById(R.id.placeimagetoview);
             changePic();
             mToolbar.setTitle("Update Place");
             Update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
                     Toast.makeText(UpdatePlace.this, "Place updated", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -128,6 +127,7 @@ public class UpdatePlace extends AppCompatActivity implements AdapterView.OnItem
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Toast.makeText(UpdatePlace.this, "Place created", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -273,4 +273,42 @@ public class UpdatePlace extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
+    void fillGoverSpinner() {
+
+        ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+        api.getGovernate().enqueue(new Callback<ArrayList<governate>>() {
+            @Override
+            public void onResponse(Call<ArrayList<governate>> call, Response<ArrayList<governate>> response) {
+                if (response.isSuccess()) {
+                    ArrayAdapter<governate> governateArrayAdapter = new ArrayAdapter<governate>(UpdatePlace.this, R.layout.support_simple_spinner_dropdown_item, response.body());
+                    governorate.setAdapter(governateArrayAdapter);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<governate>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void CategorySpinner() {
+        ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
+        api.getCategory().enqueue(new Callback<ResultcategorySet>() {
+            @Override
+            public void onResponse(Call<ResultcategorySet> call, Response<ResultcategorySet> response) {
+                if (response.isSuccess()) {
+                    ArrayAdapter<category> categoryArrayAdapter = new ArrayAdapter<category>(UpdatePlace.this, R.layout.support_simple_spinner_dropdown_item, response.body().getValue());
+                    governorate.setAdapter(categoryArrayAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultcategorySet> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

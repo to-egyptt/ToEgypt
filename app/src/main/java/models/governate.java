@@ -1,10 +1,10 @@
 package models;
 
 /**
- * Created by m07amed on 14/06/2017.
+ * Created by m07amed on 24/06/2017.
  */
 
-public class category {
+public class governate {
     private int id;
     private String name;
 

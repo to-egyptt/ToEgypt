@@ -85,7 +85,7 @@ public class Profile extends Fragment {
             update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String fullname = Profile.this.fullName.getText().toString();
+                    String fullname = fullName.getText().toString();
                     String username = userName.getText().toString();
                     String email = Email.getText().toString();
                     int age = 0;

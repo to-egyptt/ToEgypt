@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -45,16 +47,25 @@ public interface ToEgyptAPI {
     @DELETE("/odata/packages({id})")
     Call<Void> deletePackage(@Path("id") int id);
 
-    @GET("/odata/places")
+    @GET("/odata/places?$expand=category,governate")
     Call<ResultPlaceSet> getPlaces();
 
     @POST("/odata/users")
     Call<user> addUser(@Body user user);
 
-    @GET("odata/users/$count/?$filter=type_id%20eq%202")
+    @GET("/odata/users/$count/?$filter=type_id%20eq%202")
     Call<Integer> getUsersCount();
 
-    @GET("odata/users/$count/?$filter=type_id%20eq%203")
+    @GET("/odata/users/$count/?$filter=type_id%20eq%203")
     Call<Integer> getGuideCount();
+
+    @GET("/odata/categories")
+    Call<ResultcategorySet> getCategory();
+
+    @GET("/odata/governates")
+    Call<ArrayList<governate>> getGovernate();
+
+    @POST("/odata/reserved_package")
+    Call<reserved_package> reserve(@Body reserved_package reservedPackage);
 }
 
