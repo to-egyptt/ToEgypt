@@ -67,5 +67,10 @@ public interface ToEgyptAPI {
 
     @POST("/odata/reserved_package")
     Call<reserved_package> reserve(@Body reserved_package reservedPackage);
+
+    @GET("/odata/reserved_package?$filter=tourist_id eq 17&$expand=package")
+    Call<ResultReservedPackageSet> getReserrvedPackage();
+    //@GET
+    //Call<ResultReservedPackageSet>getReserrvedPackage(@Url String url);
 }
 

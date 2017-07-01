@@ -25,6 +25,7 @@ public class User extends AppCompatActivity {
     private Toolbar mToolbar;
     private Session session;
     private NavigationView navigationView;
+    public Boolean myPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class User extends AppCompatActivity {
         setContentView(R.layout.user);
         mToolbar = (Toolbar) findViewById(R.id.nav_actionbar);
         mToolbar.setTitle("Places");
+        myPackage = false;
         setSupportActionBar(mToolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -75,6 +77,7 @@ public class User extends AppCompatActivity {
                                 fragmentClass = Places.class;
                                 break;
                             case R.id.nav_myPackages:
+                                myPackage = true;
                                 fragmentClass = Packages.class;
                                 break;
 
@@ -133,6 +136,10 @@ public class User extends AppCompatActivity {
         }
     }
 
+
+//    public Boolean checkPrivate (){
+//
+//    }
 
     public void setActionBarTitle(String title) {
         mToolbar.setTitle(title);

@@ -261,7 +261,7 @@ public class UpdateUser extends AppCompatActivity {
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(UpdateUser.this, "Place created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateUser.this, "User created", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -374,7 +374,7 @@ public class UpdateUser extends AppCompatActivity {
     }
 
     void resetpassword(int userId, user user1) {
-        user1.setPassword("p@$$w0rd");
+        user1.setPassword("P@$$w0rd");
         ToEgyptAPI toEgyptAPI = retrofit.create(ToEgyptAPI.class);
         toEgyptAPI.updateUser(userId, user1).enqueue(new Callback<Void>() {
             @Override

@@ -32,4 +32,14 @@ public class reserved_package {
     public void setTourist_id(int tourist_id) {
         this.tourist_id = tourist_id;
     }
+
+    private packag packages;
+
+    public packag getPackag() {
+        return packages;
+    }
+
+    public void setPackag(packag packages) {
+        this.packages = packages;
+    }
 }

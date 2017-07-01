@@ -18,15 +18,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import BL.Session;
 import io.google.ToEgypt.Admin;
 import io.google.ToEgypt.Guide;
 import io.google.ToEgypt.R;
 import io.google.ToEgypt.UpdatePackage;
 import io.google.ToEgypt.User;
+import models.ResultReservedPackageSet;
 import models.ResultpakageSet;
 import models.Singleton;
 import models.ToEgyptAPI;
 import models.packag;
+import models.reserved_package;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +48,8 @@ public class Packages extends Fragment {
     private String activityName;
     private int placeId;
     private ProgressDialog progressDialog;
+    private Boolean privatePackage;
+    private Session session;
 
     public Packages() {
         // Required empty public constructor
@@ -63,6 +68,7 @@ public class Packages extends Fragment {
         progressDialog.setMessage("Retrieving data. please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+        session = new Session(this.getContext());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             placeId = bundle.getInt("placeId");
@@ -71,30 +77,86 @@ public class Packages extends Fragment {
         }
         retrofit = Singleton.getRetrofit();
         ToEgyptAPI api = retrofit.create(ToEgyptAPI.class);
-        api.getPackages().enqueue(new Callback<ResultpakageSet>() {
-            @Override
-            public void onResponse(Call<ResultpakageSet> call, Response<ResultpakageSet> response) {
-                packages = response.body().getValue();
-                if (placeId != 0) {
-                    ArrayList<packag> list = new ArrayList<packag>();
-                    for (int i = 0; i < packages.size(); i++) {
-                        for (int j = 0; j < packages.get(i).getPackageDetailes().size(); j++) {
-                            if (packages.get(i).getPackageDetailes().get(j).getPlace_id() == placeId)
-                                list.add(packages.get(i));
+        activityName = getActivity().getClass().getSimpleName();
+        if (activityName.equals("Admin")) {
+            api.getPackages().enqueue(new Callback<ResultpakageSet>() {
+                @Override
+                public void onResponse(Call<ResultpakageSet> call, Response<ResultpakageSet> response) {
+                    packages = response.body().getValue();
+                    if (placeId != 0) {
+                        ArrayList<packag> list = new ArrayList<packag>();
+                        for (int i = 0; i < packages.size(); i++) {
+                            for (int j = 0; j < packages.get(i).getPackageDetailes().size(); j++) {
+                                if (packages.get(i).getPackageDetailes().get(j).getPlace_id() == placeId)
+                                    list.add(packages.get(i));
+                            }
                         }
+                        packages = list;
                     }
-                    packages = list;
+                    updateUI();
+                    progressDialog.dismiss();
                 }
-                updateUI();
-                progressDialog.dismiss();
-            }
 
-            @Override
-            public void onFailure(Call<ResultpakageSet> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
+                @Override
+                public void onFailure(Call<ResultpakageSet> call, Throwable t) {
+                    Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
+            });
+        } else if (activityName.equals("User")) {
+
+            privatePackage = ((User) getActivity()).myPackage;
+            if (privatePackage) {
+                //id
+                //"/odata/reserved_package?$expand=package&$filter=tourist_id%20eq%20" + String.valueOf(session.getUserId())
+                api.getReserrvedPackage().enqueue(new Callback<ResultReservedPackageSet>() {
+                    @Override
+                    public void onResponse(Call<ResultReservedPackageSet> call, Response<ResultReservedPackageSet> response) {
+                        ArrayList<reserved_package> reservedPackages = new ArrayList<reserved_package>();
+                        reservedPackages = response.body().getValue();
+                        ArrayList<packag> listt = new ArrayList<packag>();
+                        for (int i = 0; i < reservedPackages.size(); i++) {
+                            listt.add(reservedPackages.get(i).getPackag());
+                        }
+                        packages = listt;
+                        updateUI();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultReservedPackageSet> call, Throwable t) {
+
+                    }
+                });
+                Toast.makeText(getActivity(), ":P", Toast.LENGTH_LONG).show();
+            } else {
+                api.getPackages().enqueue(new Callback<ResultpakageSet>() {
+                    @Override
+                    public void onResponse(Call<ResultpakageSet> call, Response<ResultpakageSet> response) {
+                        packages = response.body().getValue();
+                        if (placeId != 0) {
+                            ArrayList<packag> list = new ArrayList<packag>();
+                            for (int i = 0; i < packages.size(); i++) {
+                                for (int j = 0; j < packages.get(i).getPackageDetailes().size(); j++) {
+                                    if (packages.get(i).getPackageDetailes().get(j).getPlace_id() == placeId)
+                                        list.add(packages.get(i));
+                                }
+                            }
+                            packages = list;
+                        }
+                        updateUI();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResultpakageSet> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Error ,Please Check your internet connection", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
             }
-        });
+        }
+
         super.onCreate(savedInstanceState);
     }
 
@@ -105,7 +167,7 @@ public class Packages extends Fragment {
         View view = inflater.inflate(R.layout.packages, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         TextView hint = (TextView) view.findViewById(R.id.packageHint);
-        activityName = getActivity().getClass().getSimpleName();
+
         if (activityName.equals("Admin")) {
             hint.setText("select package to edit");
             ((Admin) getActivity()).setActionBarTitle("Packages");
@@ -121,13 +183,21 @@ public class Packages extends Fragment {
                 }
             });
         } else if (activityName.equals("User")) {
-            hint.setText("select package to see details and join");
-            ((User) getActivity()).setActionBarTitle("Packages");
-            ((User) getActivity()).setMenuItem(1);
-            if (placeId == 1) {
-                Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
+            if (privatePackage) {
+                ((User) getActivity()).setActionBarTitle("My Packages");
+                ((User) getActivity()).setMenuItem(2);
+                ((User) getActivity()).myPackage = false;
+
+            } else {
+                hint.setText("select package to see details and join");
+                ((User) getActivity()).setActionBarTitle("Packages");
+                ((User) getActivity()).setMenuItem(1);
+
+                if (placeId == 1) {
+                    Toast.makeText(getActivity(), "place id done", Toast.LENGTH_LONG).show();
+                }
+                fab.setVisibility(View.GONE);
             }
-            fab.setVisibility(View.GONE);
         } else if (activityName.equals("Guide")) {
             hint.setText("select package to see details");
             ((Guide) getActivity()).setActionBarTitle("Packages");
